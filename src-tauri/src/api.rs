@@ -1,27 +1,27 @@
-use anyhow::Result;
+// use anyhow::Result;
+use candle_nn::ops::softmax;
 use ferritin_core::AtomCollection;
 use ferritin_onnx_models;
 use ferritin_onnx_models::LigandMPNN;
 use pdbtbx::{Format, ReadOptions};
 use serde::Serialize;
 use std::io::BufReader;
-use std::io::Read;
+use tauri::Error as TauriError;
 
 #[derive(Serialize)]
 pub struct LIGANDMPNN_LOGITS {
-    sequence: Vec<f32>,
+    logits: Vec<f32>,
 }
 
 #[tauri::command]
-pub fn get_ligmpnn_logits(name: &str, position: i64) -> Result<LIGANDMPNN_LOGITS> {
+pub fn get_ligmpnn_logits(pdb_text: &str, position: i64) -> Result<LIGANDMPNN_LOGITS, TauriError> {
     let temp = 0.1;
-    let pos = 10;
-    let pdb_bytes = name.as_bytes();
-    let logits = process_pdb_bytes(pdb_bytes, temp, pos)?;
-    Ok(LIGANDMPNN_LOGITS { sequence: logits })
+    let pdb_bytes = pdb_text.as_bytes();
+    let logits = process_pdb_bytes(pdb_bytes, temp, position)?;
+    Ok(LIGANDMPNN_LOGITS { logits: logits })
 }
 
-fn process_pdb_bytes(pdb_bytes: &[u8], temp: f32, pos: i64) -> Result<Vec<f32>> {
+fn process_pdb_bytes(pdb_bytes: &[u8], temp: f32, position: i64) -> anyhow::Result<Vec<f32>> {
     let reader = BufReader::new(pdb_bytes);
     let (pdb, _error) = ReadOptions::default()
         .set_format(Format::Mmcif)
@@ -29,7 +29,8 @@ fn process_pdb_bytes(pdb_bytes: &[u8], temp: f32, pos: i64) -> Result<Vec<f32>> 
         .expect("Failed to parse PDB/CIF");
     let ac = AtomCollection::from(&pdb);
     let model = LigandMPNN::new().unwrap();
-    let logits = model.run_model(ac, pos, temp)?;
-    let logits = logits.to_vec1()?;
+    let logits = model.run_model(ac, position, temp)?;
+    let logits = candle_nn::ops::softmax(&logits, 1)?;
+    let logits = logits.get(0)?.to_vec1()?;
     Ok(logits)
 }

@@ -474,6 +474,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "candle-nn"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "39d417059c44d719fd03a0f711ccfe148d341469c9273d4b5731ebe965b2c97e"
+dependencies = [
+ "candle-core",
+ "half",
+ "num-traits",
+ "rayon",
+ "safetensors",
+ "serde",
+ "thiserror 1.0.69",
+]
+
+[[package]]
 name = "cargo-platform"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1194,6 +1209,7 @@ name = "fennec"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "candle-nn",
  "ferritin-core",
  "ferritin-onnx-models",
  "pdbtbx",

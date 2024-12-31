@@ -4,6 +4,7 @@
     import * as miewcss from "miew/dist/Miew.css";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
+    import { invoke } from "@tauri-apps/api/core";
 
     // Stateful Variables
     let pdbCode = $state("");
@@ -12,6 +13,38 @@
     let pdb_text = $state("");
     let current_residue = $state(0);
     let current_chain = $state(0);
+    let ligmpnn_logits = $state({});
+
+    async function lig_mpnn() {
+        console.log("lig_mpnn function called with:", {
+            has_pdb_text: !!pdb_text,
+            current_residue: current_residue,
+        });
+
+        if (pdb_text && current_residue) {
+            console.log("Calling get_ligmpnn_logits with:", {
+                position: current_residue,
+                pdb_text_length: pdb_text.length,
+            });
+
+            try {
+                ligmpnn_logits = await invoke("get_ligmpnn_logits", {
+                    pdbText: pdb_text,
+                    position: current_residue,
+                });
+                console.log("Received ligmpnn_logits:", ligmpnn_logits);
+            } catch (error) {
+                console.error("Error in lig_mpnn:", error);
+            }
+        }
+    }
+
+    // Replace $: with $effect
+    $effect(() => {
+        if (pdb_text && current_residue) {
+            lig_mpnn();
+        }
+    });
 
     onMount(() => {
         var viewer = new Miew({});
@@ -134,8 +167,12 @@
         <div class="w-1/2">
             <div id="miew" class="miew-container w-full"></div>
         </div>
-        <div class="w-1/2">
-            <h1>Hello</h1>
+
+        <div class="w-1/2 p-4">
+            <h2 class="text-2xl font-bold mb-4">LigMPNN Predictions</h2>
+            {#if Object.keys(ligmpnn_logits).length > 0}
+                {ligmpnn_logits.logits}
+            {/if}
         </div>
     </div>
 </div>
@@ -145,7 +182,7 @@
         /* position: absolute; */
         left: 10px;
         top: 10px;
-        /* width: 450px;
-        height: 450px; */
+        max-width: 450px;
+        max-height: 450px;
     }
 </style>
