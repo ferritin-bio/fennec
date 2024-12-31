@@ -20,7 +20,7 @@
 
     // PLotting State
     let plotOptions = $derived({
-        margin: 40,
+        margin: 20,
         marks: [
             Plot.barY(ligmpnn_logits.amino_acid_probs, {
                 x: "amino_acid",
@@ -53,7 +53,6 @@
         }
     }
 
-    // Replace $: with $effect
     $effect(() => {
         if (pdb_text && current_residue_index) {
             lig_mpnn();
@@ -75,8 +74,7 @@
                     let res_text = `Picked Residue: idx=${res_idx}, name=${res_name}, chain=${chain_name}, chain_idx=${chain_idx}`;
                     console.log(`Click event:`, e);
                     console.log(res_text);
-                    const pickResultElement =
-                        document.getElementById("pickResult");
+
                     // update stateful components
                     current_residue_index = res_idx;
                     current_residue_name = res_name;
@@ -117,7 +115,7 @@
             pdb_text = structureData;
             window.miew_viewer.load(structureData, {
                 format: "cif",
-                sourceType: "immediate", // needed to load the string
+                sourceType: "immediate",
             });
         } catch (err) {
             error =
