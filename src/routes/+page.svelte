@@ -1,7 +1,6 @@
 <script lang="ts">
-    import Molstar from "$lib/components/molstar.svelte";
     import { invoke } from "@tauri-apps/api/core";
-    import MiewApp from "$lib/components/miew.svelte";
+    import StructureApp from "$lib/components/structure_explore.svelte";
     let name = $state("");
     let greetMsg = $state("");
     async function greet(event: Event) {
@@ -10,5 +9,4 @@
     }
 </script>
 
-<MiewApp />
-<!-- <Molstar /> -->
+<StructureApp/>
