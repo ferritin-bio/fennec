@@ -4,9 +4,14 @@
     import * as miewcss from "miew/dist/Miew.css";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
-    let pdbCode = "";
-    let loading = false;
-    let error = "";
+
+    // Stateful Variables
+    let pdbCode = $state("");
+    let loading = $state(false);
+    let error = $state("");
+    let pdb_text = $state("");
+    let current_residue = $state(0);
+    let current_chain = $state(0);
 
     onMount(() => {
         var viewer = new Miew({});
@@ -25,7 +30,9 @@
                     console.log(res_text);
                     const pickResultElement =
                         document.getElementById("pickResult");
-                    pickResultElement.textContent = res_text;
+                    // update stateful components
+                    current_residue = res_idx;
+                    current_chain = chain_name;
                 } else {
                     console.log(
                         "Clicked object does not contain residue information",
@@ -52,13 +59,14 @@
 
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
+        current_residue = "";
+        current_chain = "";
         if (!pdbCode) return;
         loading = true;
         error = "";
         try {
             const structureData = await fetchStructure(pdbCode.toUpperCase());
-            // console.log(structureData);
-            console.log(window.miew_viewer);
+            pdb_text = structureData;
             window.miew_viewer.load(structureData, {
                 format: "cif",
                 sourceType: "immediate", // needed to load the string
@@ -70,41 +78,74 @@
         } finally {
             loading = false;
         }
+        console.log(pdb_text);
     };
 </script>
 
-<header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
-    <form
-        class="flex w-full max-w-sm items-center space-x-2"
-        on:submit={handleSubmit}
-    >
-        <Input
-            type="text"
-            placeholder="PDBCode"
-            bind:value={pdbCode}
-            disabled={loading}
-        />
-        <Button type="submit" disabled={loading}>
-            Retrieve
-            {loading ? "Loading..." : "Retrieve"}
-        </Button>
-    </form>
-</header>
+<div class="flex flex-col h-screen">
+    <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+        <form
+            class="flex w-full max-w-sm items-center space-x-2"
+            on:submit={handleSubmit}
+        >
+            <Input
+                type="text"
+                placeholder="PDBCode"
+                bind:value={pdbCode}
+                disabled={loading}
+            />
+            <Button type="submit" disabled={loading}>
+                Retrieve
+                {loading ? "Loading..." : "Retrieve"}
+            </Button>
+        </form>
+        <div
+            class="flex flex-row items-center space-x-4 p-2 bg-gray-100 rounded-md"
+        >
+            {#if pdbCode}
+                <div class="flex items-center">
+                    <span class="text-gray-600 font-semibold mr-1">PDB:</span>
+                    <span class="text-red-500">{pdbCode}</span>
+                </div>
+            {/if}
 
-<h1 id="pickResult"></h1>
+            {#if current_residue}
+                <div class="flex items-center">
+                    <span class="text-gray-600 font-semibold mr-1"
+                        >Residue:</span
+                    >
+                    <span class="text-red-500">{current_residue}</span>
+                </div>
+            {/if}
+            {#if current_chain}
+                <div class="flex items-center">
+                    <span class="text-gray-600 font-semibold mr-1">Chain:</span>
+                    <span class="text-red-500">{current_chain}</span>
+                </div>
+            {/if}
+        </div>
+    </header>
 
-{#if error}
-    <p class="text-red-500 mt-2">{error}</p>
-{/if}
+    {#if error}
+        <p class="text-red-500 mt-2">{error}</p>
+    {/if}
 
-<div id="miew" class="miew-container"></div>
+    <div class="flex flex-row w-full h-full">
+        <div class="w-1/2">
+            <div id="miew" class="miew-container w-full"></div>
+        </div>
+        <div class="w-1/2">
+            <h1>Hello</h1>
+        </div>
+    </div>
+</div>
 
 <style>
     #miew {
         /* position: absolute; */
         left: 10px;
         top: 10px;
-        width: 450px;
-        height: 450px;
+        /* width: 450px;
+        height: 450px; */
     }
 </style>

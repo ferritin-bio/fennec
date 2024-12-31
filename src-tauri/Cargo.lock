@@ -1193,8 +1193,10 @@ dependencies = [
 name = "fennec"
 version = "0.1.0"
 dependencies = [
+ "anyhow",
  "ferritin-core",
  "ferritin-onnx-models",
+ "pdbtbx",
  "serde",
  "serde_json",
  "tauri",
