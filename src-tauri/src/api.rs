@@ -8,17 +8,43 @@ use serde::Serialize;
 use std::io::BufReader;
 use tauri::Error as TauriError;
 
+
+
+// lifted from ferritin-plms::ligandMPNN
+//
+pub fn int_to_aa1(aa_int: u32) -> char {
+    match aa_int {
+        0 => 'A', 1 => 'C', 2 => 'D',
+        3 => 'E', 4 => 'F', 5 => 'G',
+        6 => 'H', 7 => 'I', 8 => 'K',
+        9 => 'L', 10 => 'M', 11 => 'N',
+        12 => 'P', 13 => 'Q', 14 => 'R',
+        15 => 'S', 16 => 'T', 17 => 'V',
+        18 => 'W', 19 => 'Y', 20 => 'X',
+        _ => 'X'
+    }
+}
+
 #[derive(Serialize)]
 pub struct LIGANDMPNN_LOGITS {
-    logits: Vec<f32>,
+    amino_acid_probs: Vec<serde_json::Value>
 }
+
 
 #[tauri::command]
 pub fn get_ligmpnn_logits(pdb_text: &str, position: i64) -> Result<LIGANDMPNN_LOGITS, TauriError> {
     let temp = 0.1;
     let pdb_bytes = pdb_text.as_bytes();
     let logits = process_pdb_bytes(pdb_bytes, temp, position)?;
-    Ok(LIGANDMPNN_LOGITS { logits: logits })
+    let mut amino_acid_probs = Vec::new();
+    for i in 0..21 {
+        amino_acid_probs.push(serde_json::json!({
+            "amino_acid": int_to_aa1(i).to_string(),
+            "pseudo_prob": logits[i as usize]
+        }));
+    }
+
+    Ok(LIGANDMPNN_LOGITS { amino_acid_probs })
 }
 
 fn process_pdb_bytes(pdb_bytes: &[u8], temp: f32, position: i64) -> anyhow::Result<Vec<f32>> {

@@ -5,32 +5,46 @@
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import { invoke } from "@tauri-apps/api/core";
+    import LigBarChart from "./structure_components/ligand_mpnn.svelte";
+    import * as Plot from "@observablehq/plot";
 
     // Stateful Variables
     let pdbCode = $state("");
     let loading = $state(false);
     let error = $state("");
     let pdb_text = $state("");
-    let current_residue = $state(0);
+    let current_residue_index = $state(0);
+    let current_residue_name = $state("");
     let current_chain = $state(0);
     let ligmpnn_logits = $state({});
+
+    // PLotting State
+    let plotOptions = $derived({
+        margin: 40,
+        marks: [
+            Plot.barY(ligmpnn_logits.amino_acid_probs, {
+                x: "amino_acid",
+                y: "pseudo_prob",
+            }),
+        ],
+    });
 
     async function lig_mpnn() {
         console.log("lig_mpnn function called with:", {
             has_pdb_text: !!pdb_text,
-            current_residue: current_residue,
+            current_residue: current_residue_index,
         });
 
-        if (pdb_text && current_residue) {
+        if (pdb_text && current_residue_index) {
             console.log("Calling get_ligmpnn_logits with:", {
-                position: current_residue,
+                position: current_residue_index,
                 pdb_text_length: pdb_text.length,
             });
 
             try {
                 ligmpnn_logits = await invoke("get_ligmpnn_logits", {
                     pdbText: pdb_text,
-                    position: current_residue,
+                    position: current_residue_index,
                 });
                 console.log("Received ligmpnn_logits:", ligmpnn_logits);
             } catch (error) {
@@ -41,7 +55,7 @@
 
     // Replace $: with $effect
     $effect(() => {
-        if (pdb_text && current_residue) {
+        if (pdb_text && current_residue_index) {
             lig_mpnn();
         }
     });
@@ -64,7 +78,8 @@
                     const pickResultElement =
                         document.getElementById("pickResult");
                     // update stateful components
-                    current_residue = res_idx;
+                    current_residue_index = res_idx;
+                    current_residue_name = res_name;
                     current_chain = chain_name;
                 } else {
                     console.log(
@@ -92,8 +107,8 @@
 
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
-        current_residue = "";
-        current_chain = "";
+        current_residue_name = "";
+        current_chain = 0;
         if (!pdbCode) return;
         loading = true;
         error = "";
@@ -142,12 +157,20 @@
                 </div>
             {/if}
 
-            {#if current_residue}
+            {#if current_residue_name}
                 <div class="flex items-center">
                     <span class="text-gray-600 font-semibold mr-1"
                         >Residue:</span
                     >
-                    <span class="text-red-500">{current_residue}</span>
+                    <span class="text-red-500">{current_residue_name}</span>
+                </div>
+            {/if}
+            {#if current_residue_index}
+                <div class="flex items-center">
+                    <span class="text-gray-600 font-semibold mr-1"
+                        >Residue:</span
+                    >
+                    <span class="text-red-500">{current_residue_index}</span>
                 </div>
             {/if}
             {#if current_chain}
@@ -165,14 +188,15 @@
 
     <div class="flex flex-row w-full h-full">
         <div class="w-1/2">
+            <h2 class="text-2xl font-bold mb-4">Structure</h2>
             <div id="miew" class="miew-container w-full"></div>
         </div>
 
         <div class="w-1/2 p-4">
             <h2 class="text-2xl font-bold mb-4">LigMPNN Predictions</h2>
-            {#if Object.keys(ligmpnn_logits).length > 0}
-                {ligmpnn_logits.logits}
-            {/if}
+            <div style="width: 80%; height: 600px; margin: 0 auto;">
+                <LigBarChart options={plotOptions} />
+            </div>
         </div>
     </div>
 </div>
