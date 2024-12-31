@@ -73,21 +73,23 @@
     };
 </script>
 
-<form
-    class="flex w-full max-w-sm items-center space-x-2"
-    on:submit={handleSubmit}
->
-    <Input
-        type="text"
-        placeholder="PDBCode"
-        bind:value={pdbCode}
-        disabled={loading}
-    />
-    <Button type="submit" disabled={loading}>
-        Retrieve
-        {loading ? "Loading..." : "Retrieve"}
-    </Button>
-</form>
+<header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+    <form
+        class="flex w-full max-w-sm items-center space-x-2"
+        on:submit={handleSubmit}
+    >
+        <Input
+            type="text"
+            placeholder="PDBCode"
+            bind:value={pdbCode}
+            disabled={loading}
+        />
+        <Button type="submit" disabled={loading}>
+            Retrieve
+            {loading ? "Loading..." : "Retrieve"}
+        </Button>
+    </form>
+</header>
 
 <h1 id="pickResult"></h1>
 
@@ -100,8 +102,8 @@
 <style>
     #miew {
         /* position: absolute; */
-        left: 50px;
-        top: 50px;
+        left: 10px;
+        top: 10px;
         width: 450px;
         height: 450px;
     }
