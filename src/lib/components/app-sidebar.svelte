@@ -6,6 +6,9 @@
     import SettingsIcon from "lucide-svelte/icons/settings"; // Changed to SettingsIcon
     import HelpIcon from "lucide-svelte/icons/help-circle"; // Changed to HelpIcon
     import * as Sidebar from "./ui/sidebar/index.js";
+    import * as Card from "$lib/components/ui/card/index.js";
+    import * as Avatar from "$lib/components/ui/avatar/index.js";
+    import Button from "./ui/button/button.svelte";
 
     // Menu items for viewers
     const viewerItems = [
@@ -37,7 +40,12 @@
 
 <Sidebar.Root>
     <Sidebar.Content>
-        <Sidebar.Header></Sidebar.Header>
+        <Sidebar.Header>
+            <Button variant="outline" style="min-height: 50px">
+                <img src="/app-icon.png" alt="Fennec" class="mr-2 size-6" />
+                <span style="font-size: 16px">Fennec. Local-First ML </span>
+            </Button>
+        </Sidebar.Header>
         <Sidebar.Group>
             <Sidebar.GroupLabel>Deep Learning</Sidebar.GroupLabel>
             <Sidebar.GroupContent>
@@ -112,5 +120,16 @@
         width: 1.2em;
         height: 1.2em;
         flex-shrink: 0; /* Prevent icon from shrinking */
+    }
+    .card {
+        background-color: #e5e5e5;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .app-icon {
+        width: 32px;
+        height: 32px;
     }
 </style>
