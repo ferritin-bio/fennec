@@ -32,8 +32,7 @@ pub struct LIGANDMPNN_LOGITS {
 
 
 #[tauri::command]
-pub fn get_ligmpnn_logits(pdb_text: &str, position: i64) -> Result<LIGANDMPNN_LOGITS, TauriError> {
-    let temp = 0.1;
+pub fn get_ligmpnn_logits(pdb_text: &str, position: i64, temp: f32) -> Result<LIGANDMPNN_LOGITS, TauriError> {
     let pdb_bytes = pdb_text.as_bytes();
     let logits = process_pdb_bytes(pdb_bytes, temp, position)?;
     let mut amino_acid_probs = Vec::new();

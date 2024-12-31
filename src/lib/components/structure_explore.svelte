@@ -4,6 +4,8 @@
     import * as miewcss from "miew/dist/Miew.css";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
+    import { Slider } from "$lib/components/ui/slider/index.js";
+
     import { invoke } from "@tauri-apps/api/core";
     import LigBarChart from "./structure_components/ligand_mpnn.svelte";
     import * as Plot from "@observablehq/plot";
@@ -17,6 +19,7 @@
     let current_residue_name = $state("");
     let current_chain = $state(0);
     let ligmpnn_logits = $state({});
+    let temperature = $state(0.1);
 
     // PLotting State
     let plotOptions = $derived({
@@ -45,6 +48,7 @@
                 ligmpnn_logits = await invoke("get_ligmpnn_logits", {
                     pdbText: pdb_text,
                     position: current_residue_index,
+                    temp: temperature,
                 });
                 console.log("Received ligmpnn_logits:", ligmpnn_logits);
             } catch (error) {
@@ -192,6 +196,13 @@
 
         <div class="w-1/2 p-4">
             <h2 class="text-2xl font-bold mb-4">LigMPNN Predictions</h2>
+            <Slider
+                type="single"
+                bind:value={temperature}
+                max={1}
+                min={0.05}
+                step={0.05}
+            />
             <div style="width: 80%; height: 600px; margin: 0 auto;">
                 <LigBarChart options={plotOptions} />
             </div>

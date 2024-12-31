@@ -17,11 +17,6 @@
             url: "/",
             icon: Molecule,
         },
-        // {
-        //     title: "Molstar",
-        //     url: "/molstar",
-        //     icon: Microscope,
-        // },
     ];
 
     const utilityItems = [
