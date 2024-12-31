@@ -13,10 +13,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@observablehq/plot": "^0.6.16",
     "@tauri-apps/api": "^2",
     "@tauri-apps/plugin-opener": "^2",
+    "d3": "^7.9.0",
     "miew": "^0.11.0",
-    "molstar": "^4.10.0",
     "path": "^0.12.7"
   },
   "devDependencies": {
