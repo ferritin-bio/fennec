@@ -1,57 +1,97 @@
 <script>
     import * as Plot from "@observablehq/plot";
     import * as d3 from "d3";
-    export let options;
+    import { invoke } from "@tauri-apps/api/core";
+
+    const { pdbText = "", position = 0, temperature = 0.1 } = $props();
+
+    let loading = $state(false);
+    let error = $state(null);
+    let logits = $state({});
+
+    $effect(() => {
+        if (pdbText && position) fetchLogits();
+    });
+
+    async function fetchLogits() {
+        if (!pdbText || !position) return;
+        loading = true;
+        error = null;
+
+        try {
+            logits = await invoke("get_ligmpnn_logits", {
+                pdbText,
+                position,
+                temp: temperature,
+            });
+        } catch (e) {
+            error = e.message;
+            console.error("Error fetching logits:", e);
+        } finally {
+            loading = false;
+        }
+    }
 
     function myplot(node) {
         let plot;
 
         function createPlot() {
-            const width = node.clientWidth;
-            const height = node.clientHeight;
-
-            const plotOptions = {
-                ...options,
-                width,
-                height,
+            plot = Plot.plot({
+                width: node.clientWidth,
+                height: node.clientHeight,
+                margin: 20,
                 style: {
                     width: "100%",
                     height: "100%",
+                    background: "transparent",
                     overflow: "visible",
                 },
-            };
+                marks: [
+                    Plot.barY(logits.amino_acid_probs || [], {
+                        x: "amino_acid",
+                        y: "pseudo_prob",
+                        fill: "orange",
+                        rx: 2,
+                    }),
+                    Plot.ruleY([0]),
+                ],
+                x: {
+                    label: "Amino Acid",
+                    tickRotate: -45,
+                    labelOffset: 35,
+                },
+                y: {
+                    label: "Probability",
+                    grid: true,
+                },
+            });
 
-            plot = Plot.plot(plotOptions);
             node.innerHTML = "";
             node.appendChild(plot);
         }
 
-        // Initial creation
         createPlot();
-
-        // Handle resize
-        const resizeObserver = new ResizeObserver(() => {
-            createPlot();
-        });
-        resizeObserver.observe(node);
-
         return {
             destroy() {
-                resizeObserver.disconnect();
                 node.innerHTML = "";
             },
         };
     }
 </script>
 
-{#key options}
+{#if loading}
+    <div class="loading">Loading...</div>
+{:else if error}
+    <div class="error">{error}</div>
+{:else if !logits.amino_acid_probs?.length}
+    <div class="no-data">Select a residue to view LigMPNN predictions</div>
+{:else}
     <div
         use:myplot
-        {...$$restProps}
         style="width: 100%; height: 100%; min-height: 400px;"
         class="plot-container"
-    ></div>
-{/key}
+    />
+{/if}
 
 <style>
     .plot-container {
@@ -59,5 +99,14 @@
         height: 100%;
         max-height: 450px;
         position: relative;
+    }
+
+    .no-data {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-style: italic;
     }
 </style>

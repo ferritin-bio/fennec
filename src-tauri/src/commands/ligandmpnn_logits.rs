@@ -1,4 +1,6 @@
-// use anyhow::Result;
+//! LigandMPNN_Logits
+//!
+use tauri;
 use candle_nn::ops::softmax;
 use ferritin_core::AtomCollection;
 use ferritin_onnx_models;
@@ -7,8 +9,6 @@ use pdbtbx::{Format, ReadOptions};
 use serde::Serialize;
 use std::io::BufReader;
 use tauri::Error as TauriError;
-
-
 
 // lifted from ferritin-plms::ligandMPNN
 //
