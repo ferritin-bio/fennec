@@ -1,7 +1,24 @@
 <script>
     import * as Plot from "@observablehq/plot";
     import * as d3 from "d3";
-    export let options;
+
+    // export let options;
+    const { logits = {}, options = {} } = $props();
+
+    console.log("Props received:", { logits, options });
+
+    const plotOptions = $derived({
+        margin: 20,
+        marks: [
+            Plot.barY(logits.amino_acid_probs || [], {
+                x: "amino_acid",
+                y: "pseudo_prob",
+            }),
+        ],
+    });
+
+    console.log("Props received:", { logits, options });
+    console.log("Plot options:", plotOptions);
 
     function myplot(node) {
         let plot;
@@ -11,7 +28,7 @@
             const height = node.clientHeight;
 
             const plotOptions = {
-                ...options,
+                ...plotOptions,
                 width,
                 height,
                 style: {
@@ -44,14 +61,19 @@
     }
 </script>
 
-{#key options}
+<div class="plot-container">
+    Plot Options: {JSON.stringify(plotOptions)}
+    <br />
+    Debug: {JSON.stringify(logits)}
+</div>
+
+<!-- {#key plotOptions}
     <div
         use:myplot
-        {...$$restProps}
         style="width: 100%; height: 100%; min-height: 400px;"
         class="plot-container"
     ></div>
-{/key}
+{/key} -->
 
 <style>
     .plot-container {
