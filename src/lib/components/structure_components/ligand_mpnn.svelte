@@ -5,15 +5,16 @@
 
     const { pdbText = "", position = 0, temperature = 0.1 } = $props();
 
-    // Add local state for loading and errors
     let loading = $state(false);
     let error = $state(null);
     let logits = $state({});
 
-    // Function to fetch data
+    $effect(() => {
+        if (pdbText && position) fetchLogits();
+    });
+
     async function fetchLogits() {
         if (!pdbText || !position) return;
-
         loading = true;
         error = null;
 
@@ -31,65 +32,44 @@
         }
     }
 
-    // Effect to fetch data when props change
-    $effect(() => {
-        if (pdbText && position) {
-            fetchLogits();
-        }
-    });
-
-    const plotOptions = $derived({
-        margin: 20,
-        style: {
-            background: "transparent",
-            overflow: "visible",
-        },
-        marks: [
-            Plot.barY(logits.amino_acid_probs || [], {
-                x: "amino_acid",
-                y: "pseudo_prob",
-                fill: "steelblue",
-                rx: 2,
-            }),
-            Plot.ruleY([0]),
-        ],
-        x: {
-            label: "Amino Acid",
-            tickRotate: -45,
-        },
-        y: {
-            label: "Probability",
-            grid: true,
-        },
-    });
-
-    console.log("Plot options:", plotOptions);
-
     function myplot(node) {
         let plot;
 
         function createPlot() {
-            const width = node.clientWidth;
-            const height = node.clientHeight;
-
-            const finalOptions = {
-                ...plotOptions,
-                width,
-                height,
+            plot = Plot.plot({
+                width: node.clientWidth,
+                height: node.clientHeight,
+                margin: 20,
                 style: {
                     width: "100%",
                     height: "100%",
+                    background: "transparent",
                     overflow: "visible",
                 },
-            };
+                marks: [
+                    Plot.barY(logits.amino_acid_probs || [], {
+                        x: "amino_acid",
+                        y: "pseudo_prob",
+                        fill: "steelblue",
+                        rx: 2,
+                    }),
+                    Plot.ruleY([0]),
+                ],
+                x: {
+                    label: "Amino Acid",
+                    tickRotate: -45,
+                },
+                y: {
+                    label: "Probability",
+                    grid: true,
+                },
+            });
 
-            plot = Plot.plot(finalOptions);
             node.innerHTML = "";
             node.appendChild(plot);
         }
 
         createPlot();
-
         return {
             destroy() {
                 node.innerHTML = "";
@@ -103,13 +83,11 @@
 {:else if error}
     <div class="error">{error}</div>
 {:else}
-    {#key plotOptions}
-        <div
-            use:myplot
-            style="width: 100%; height: 100%; min-height: 400px;"
-            class="plot-container"
-        />
-    {/key}
+    <div
+        use:myplot
+        style="width: 100%; height: 100%; min-height: 400px;"
+        class="plot-container"
+    />
 {/if}
 
 <style>
