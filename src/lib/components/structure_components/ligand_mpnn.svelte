@@ -50,7 +50,7 @@
                     Plot.barY(logits.amino_acid_probs || [], {
                         x: "amino_acid",
                         y: "pseudo_prob",
-                        fill: "steelblue",
+                        fill: "orange",
                         rx: 2,
                     }),
                     Plot.ruleY([0]),
@@ -58,6 +58,7 @@
                 x: {
                     label: "Amino Acid",
                     tickRotate: -45,
+                    labelOffset: 35,
                 },
                 y: {
                     label: "Probability",
