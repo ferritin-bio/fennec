@@ -150,13 +150,24 @@
 
         <div class="w-1/2 p-4">
             <h2 class="text-2xl font-bold mb-4">LigMPNN Predictions</h2>
-            <Slider
-                type="single"
-                bind:value={temperature}
-                max={1}
-                min={0.05}
-                step={0.05}
-            />
+            {#if pdb_text}
+                <div class="slider-container">
+                    <div class="slider-header">
+                        <span>Temperature</span>
+                        <span class="temperature-value"
+                            >{temperature.toFixed(2)}</span
+                        >
+                    </div>
+                    <Slider
+                        type="single"
+                        bind:value={temperature}
+                        max={1}
+                        min={0.05}
+                        step={0.05}
+                    />
+                </div>
+            {/if}
+
             <div style="width: 80%; height: 600px; margin: 0 auto;">
                 <LigBarChart
                     pdbText={pdb_text}
@@ -175,5 +186,24 @@
         top: 10px;
         max-width: 450px;
         max-height: 450px;
+    }
+    .slider-container {
+        background-color: #f3f4f6;
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .slider-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+    }
+
+    .temperature-value {
+        color: #4b5563;
+        font-family: monospace;
     }
 </style>

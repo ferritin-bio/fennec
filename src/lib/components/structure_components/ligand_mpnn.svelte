@@ -82,6 +82,8 @@
     <div class="loading">Loading...</div>
 {:else if error}
     <div class="error">{error}</div>
+{:else if !logits.amino_acid_probs?.length}
+    <div class="no-data">Select a residue to view LigMPNN predictions</div>
 {:else}
     <div
         use:myplot
@@ -96,5 +98,14 @@
         height: 100%;
         max-height: 450px;
         position: relative;
+    }
+
+    .no-data {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #666;
+        font-style: italic;
     }
 </style>
