@@ -193,12 +193,7 @@
                 step={0.05}
             />
             <div style="width: 80%; height: 600px; margin: 0 auto;">
-                <LigBarChart
-                    logits={ligmpnn_logits}
-                    options={{
-                        margin: 20,
-                    }}
-                />
+                <LigBarChart logits={ligmpnn_logits} />
             </div>
         </div>
     </div>

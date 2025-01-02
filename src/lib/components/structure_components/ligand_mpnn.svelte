@@ -2,22 +2,32 @@
     import * as Plot from "@observablehq/plot";
     import * as d3 from "d3";
 
-    // export let options;
-    const { logits = {}, options = {} } = $props();
-
-    console.log("Props received:", { logits, options });
-
+    const { logits = {} } = $props();
     const plotOptions = $derived({
         margin: 20,
+        style: {
+            background: "transparent",
+            overflow: "visible",
+        },
         marks: [
             Plot.barY(logits.amino_acid_probs || [], {
                 x: "amino_acid",
                 y: "pseudo_prob",
+                fill: "steelblue",
+                rx: 2,
             }),
+            Plot.ruleY([0]),
         ],
+        x: {
+            label: "Amino Acid",
+            tickRotate: -45,
+        },
+        y: {
+            label: "Probability",
+            grid: true,
+        },
     });
 
-    console.log("Props received:", { logits, options });
     console.log("Plot options:", plotOptions);
 
     function myplot(node) {
