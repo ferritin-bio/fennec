@@ -27,7 +27,7 @@
             const width = node.clientWidth;
             const height = node.clientHeight;
 
-            const plotOptions = {
+            const finalOptions = {
                 ...plotOptions,
                 width,
                 height,
@@ -38,42 +38,28 @@
                 },
             };
 
-            plot = Plot.plot(plotOptions);
+            plot = Plot.plot(finalOptions);
             node.innerHTML = "";
             node.appendChild(plot);
         }
 
-        // Initial creation
         createPlot();
-
-        // Handle resize
-        const resizeObserver = new ResizeObserver(() => {
-            createPlot();
-        });
-        resizeObserver.observe(node);
 
         return {
             destroy() {
-                resizeObserver.disconnect();
                 node.innerHTML = "";
             },
         };
     }
 </script>
 
-<div class="plot-container">
-    Plot Options: {JSON.stringify(plotOptions)}
-    <br />
-    Debug: {JSON.stringify(logits)}
-</div>
-
-<!-- {#key plotOptions}
+{#key plotOptions}
     <div
         use:myplot
         style="width: 100%; height: 100%; min-height: 400px;"
         class="plot-container"
-    ></div>
-{/key} -->
+    />
+{/key}
 
 <style>
     .plot-container {

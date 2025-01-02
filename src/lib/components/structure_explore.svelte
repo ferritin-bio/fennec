@@ -21,17 +21,6 @@
     let ligmpnn_logits = $state({});
     let temperature = $state(0.1);
 
-    // PLotting State
-    // let plotOptions = $derived({
-    //     margin: 20,
-    //     marks: [
-    //         Plot.barY(ligmpnn_logits.amino_acid_probs, {
-    //             x: "amino_acid",
-    //             y: "pseudo_prob",
-    //         }),
-    //     ],
-    // });
-
     async function lig_mpnn() {
         console.log("lig_mpnn function called with:", {
             has_pdb_text: !!pdb_text,
