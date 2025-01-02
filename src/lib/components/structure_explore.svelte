@@ -5,10 +5,7 @@
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import { Slider } from "$lib/components/ui/slider/index.js";
-
-    import { invoke } from "@tauri-apps/api/core";
     import LigBarChart from "./structure_components/ligand_mpnn.svelte";
-    import * as Plot from "@observablehq/plot";
 
     // Stateful Variables
     let pdbCode = $state("");
@@ -18,39 +15,7 @@
     let current_residue_index = $state(0);
     let current_residue_name = $state("");
     let current_chain = $state(0);
-    let ligmpnn_logits = $state({});
     let temperature = $state(0.1);
-
-    async function lig_mpnn() {
-        console.log("lig_mpnn function called with:", {
-            has_pdb_text: !!pdb_text,
-            current_residue: current_residue_index,
-        });
-
-        if (pdb_text && current_residue_index) {
-            console.log("Calling get_ligmpnn_logits with:", {
-                position: current_residue_index,
-                pdb_text_length: pdb_text.length,
-            });
-
-            try {
-                ligmpnn_logits = await invoke("get_ligmpnn_logits", {
-                    pdbText: pdb_text,
-                    position: current_residue_index,
-                    temp: temperature,
-                });
-                console.log("Received ligmpnn_logits:", ligmpnn_logits);
-            } catch (error) {
-                console.error("Error in lig_mpnn:", error);
-            }
-        }
-    }
-
-    $effect(() => {
-        if (pdb_text && current_residue_index) {
-            lig_mpnn();
-        }
-    });
 
     onMount(() => {
         var viewer = new Miew({});
