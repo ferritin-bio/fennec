@@ -193,7 +193,11 @@
                 step={0.05}
             />
             <div style="width: 80%; height: 600px; margin: 0 auto;">
-                <LigBarChart logits={ligmpnn_logits} />
+                <LigBarChart
+                    pdbText={pdb_text}
+                    position={current_residue_index}
+                    {temperature}
+                />
             </div>
         </div>
     </div>

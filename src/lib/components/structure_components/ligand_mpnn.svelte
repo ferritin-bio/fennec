@@ -1,8 +1,43 @@
 <script>
     import * as Plot from "@observablehq/plot";
     import * as d3 from "d3";
+    import { invoke } from "@tauri-apps/api/core";
 
-    const { logits = {} } = $props();
+    const { pdbText = "", position = 0, temperature = 0.1 } = $props();
+
+    // Add local state for loading and errors
+    let loading = $state(false);
+    let error = $state(null);
+    let logits = $state({});
+
+    // Function to fetch data
+    async function fetchLogits() {
+        if (!pdbText || !position) return;
+
+        loading = true;
+        error = null;
+
+        try {
+            logits = await invoke("get_ligmpnn_logits", {
+                pdbText,
+                position,
+                temp: temperature,
+            });
+        } catch (e) {
+            error = e.message;
+            console.error("Error fetching logits:", e);
+        } finally {
+            loading = false;
+        }
+    }
+
+    // Effect to fetch data when props change
+    $effect(() => {
+        if (pdbText && position) {
+            fetchLogits();
+        }
+    });
+
     const plotOptions = $derived({
         margin: 20,
         style: {
@@ -63,13 +98,19 @@
     }
 </script>
 
-{#key plotOptions}
-    <div
-        use:myplot
-        style="width: 100%; height: 100%; min-height: 400px;"
-        class="plot-container"
-    />
-{/key}
+{#if loading}
+    <div class="loading">Loading...</div>
+{:else if error}
+    <div class="error">{error}</div>
+{:else}
+    {#key plotOptions}
+        <div
+            use:myplot
+            style="width: 100%; height: 100%; min-height: 400px;"
+            class="plot-container"
+        />
+    {/key}
+{/if}
 
 <style>
     .plot-container {
