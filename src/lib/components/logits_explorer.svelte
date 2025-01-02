@@ -1,11 +1,9 @@
 <script lang="ts">
     import { onMount } from "svelte";
-    import Miew from "miew";
-    import * as miewcss from "miew/dist/Miew.css";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import { Slider } from "$lib/components/ui/slider/index.js";
-    import LigBarChart from "./structure_components/ligand_mpnn.svelte";
+    import ESM2Logits from "$lib/components/structure_components/esm2_logits.svelte";
 
     // Stateful Variables
     let pdbCode = $state("");
@@ -45,7 +43,7 @@
     <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <form
             class="flex w-full max-w-sm items-center space-x-2"
-            on:submit={handleSubmit}
+            onsubmit={handleSubmit}
         >
             <Input
                 type="text"
@@ -80,6 +78,11 @@
 
         <div class="w-1/3">
             <h2 class="text-2xl font-bold mb-4">ESM2</h2>
+            {#if pdb_text}
+                <div class="text-sm text-gray-700">
+                    <ESM2Logits pdbText={pdb_text} />
+                </div>
+            {/if}
         </div>
 
         <div class="w-1/3">

@@ -70,7 +70,7 @@
     <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <form
             class="flex w-full max-w-sm items-center space-x-2"
-            on:submit={handleSubmit}
+            onsubmit={handleSubmit}
         >
             <Input
                 type="text"
