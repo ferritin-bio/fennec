@@ -1431,7 +1431,7 @@ dependencies = [
 [[package]]
 name = "ferritin-core"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#f86637801b2743b1b6015cf9d98e847b0059c9e8"
+source = "git+https://github.com/zachcp/ferritin.git#208a76649b2209715d969a7a040260ccb438e534"
 dependencies = [
  "candle-core",
  "itertools 0.14.0",
@@ -1443,7 +1443,7 @@ dependencies = [
 [[package]]
 name = "ferritin-onnx-models"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#f86637801b2743b1b6015cf9d98e847b0059c9e8"
+source = "git+https://github.com/zachcp/ferritin.git#208a76649b2209715d969a7a040260ccb438e534"
 dependencies = [
  "anyhow",
  "candle-core",
@@ -1462,7 +1462,7 @@ dependencies = [
 [[package]]
 name = "ferritin-plms"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#f86637801b2743b1b6015cf9d98e847b0059c9e8"
+source = "git+https://github.com/zachcp/ferritin.git#208a76649b2209715d969a7a040260ccb438e534"
 dependencies = [
  "anyhow",
  "candle-core",
@@ -1485,7 +1485,7 @@ dependencies = [
 [[package]]
 name = "ferritin-test-data"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#f86637801b2743b1b6015cf9d98e847b0059c9e8"
+source = "git+https://github.com/zachcp/ferritin.git#208a76649b2209715d969a7a040260ccb438e534"
 dependencies = [
  "tempfile",
 ]
