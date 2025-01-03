@@ -2,6 +2,7 @@
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
     import ESM2Logits from "$lib/components/structure_components/esm2_logits.svelte";
+    import AmplifyLogits from "$lib/components/structure_components/amplify_logits.svelte";
 
     // Stateful Variables
     let pdbCode = $state("");
@@ -67,24 +68,20 @@
 
     <div class="flex-1 overflow-auto p-4">
         <div class="space-y-6">
-            <section>
-                <h2 class="text-2xl font-bold mb-4">LigMPNN Predictions</h2>
-                <!-- Add your LigMPNN content here -->
-            </section>
-
-            <section>
-                <h2 class="text-2xl font-bold mb-4">ESM2</h2>
-                {#if pdb_text}
+            {#if pdb_text}
+                <section>
+                    <h2 class="text-2xl font-bold mb-4">ESM2</h2>
                     <div class="h-[400px] w-full">
                         <ESM2Logits pdbText={pdb_text} />
                     </div>
-                {/if}
-            </section>
-
-            <section>
-                <h2 class="text-2xl font-bold mb-4">Amplify</h2>
-                <!-- Add your Amplify content here -->
-            </section>
+                </section>
+                <section>
+                    <h2 class="text-2xl font-bold mb-4">Amplify</h2>
+                    <div class="h-[400px] w-full">
+                        <AmplifyLogits pdbText={pdb_text} />
+                    </div>
+                </section>
+            {/if}
         </div>
     </div>
 </div>

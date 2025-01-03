@@ -9,7 +9,7 @@ use std::io::BufReader;
 use tauri::Error as TauriError;
 
 #[tauri::command]
-pub fn get_amplify_logits(pdb_text: &str, position: i64, temp: f32) -> Result<Vec<PseudoProbability>, String> {
+pub fn get_amplify_logits(pdb_text: &str) -> Result<Vec<PseudoProbability>, String> {
     let pdb_bytes = pdb_text.as_bytes();
     let reader = BufReader::new(pdb_bytes);
     let (pdb, _error) = ReadOptions::default()
@@ -36,7 +36,7 @@ pub fn get_amplify_logits(pdb_text: &str, position: i64, temp: f32) -> Result<Ve
 }
 
 #[tauri::command]
-pub fn get_amplify_contact_map(pdb_text: &str, position: i64, temp: f32) -> Result<Vec<ContactMap>, String> {
+pub fn get_amplify_contact_map(pdb_text: &str) -> Result<Vec<ContactMap>, String> {
     let pdb_bytes = pdb_text.as_bytes();
     let reader = BufReader::new(pdb_bytes);
     let (pdb, _error) = ReadOptions::default()
@@ -51,6 +51,7 @@ pub fn get_amplify_contact_map(pdb_text: &str, position: i64, temp: f32) -> Resu
         .collect::<String>();
     let device = device(false).map_err(|e| e.to_string())?;
     let model = "120M"; // this should be a param
+    println!("Device: {:?}", &device);
     let amp_model = match model{
         "120M" => AmplifyModels::AMP120M,
         "350M" => AmplifyModels::AMP350M,
