@@ -1,13 +1,12 @@
 <script>
     import * as Plot from "@observablehq/plot";
-    import * as d3 from "d3";
     import { invoke } from "@tauri-apps/api/core";
 
     const { pdbText = "", position = 0, temperature = 0.1 } = $props();
 
     let loading = $state(false);
     let error = $state(null);
-    let logits = $state({});
+    let logits = $state([]);
 
     $effect(() => {
         if (pdbText && position) fetchLogits();
@@ -47,7 +46,7 @@
                     overflow: "visible",
                 },
                 marks: [
-                    Plot.barY(logits.amino_acid_probs || [], {
+                    Plot.barY(logits || [], {
                         x: "amino_acid",
                         y: "pseudo_prob",
                         fill: "orange",
@@ -83,7 +82,7 @@
     <div class="loading">Loading...</div>
 {:else if error}
     <div class="error">{error}</div>
-{:else if !logits.amino_acid_probs?.length}
+{:else if !logits?.length}
     <div class="no-data">Select a residue to view LigMPNN predictions</div>
 {:else}
     <div
