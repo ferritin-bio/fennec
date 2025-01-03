@@ -3,23 +3,10 @@
 use anyhow::Result;
 use ferritin_core::AtomCollection;
 use ferritin_onnx_models::{ESM2Models, ESM2};
+use ferritin_plms::ligandmpnn::utilities::aa3to1;
 use ferritin_plms::types::PseudoProbability;
 use pdbtbx::{Format, ReadOptions};
 use std::io::BufReader;
-
-#[rustfmt::skip]
-// todo: better utility library
-pub fn aa3to1(aa: &str) -> char {
-    match aa {
-        "ALA" => 'A', "CYS" => 'C', "ASP" => 'D',
-        "GLU" => 'E', "PHE" => 'F', "GLY" => 'G',
-        "HIS" => 'H', "ILE" => 'I', "LYS" => 'K',
-        "LEU" => 'L', "MET" => 'M', "ASN" => 'N',
-        "PRO" => 'P', "GLN" => 'Q', "ARG" => 'R',
-        "SER" => 'S', "THR" => 'T', "VAL" => 'V',
-        "TRP" => 'W', "TYR" => 'Y', _     => 'X',
-    }
-}
 
 #[tauri::command]
 pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<PseudoProbability>, String> {
@@ -29,7 +16,6 @@ pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<PseudoProbability>, String> 
     // let esm_model = ESM2Models::ESM2_T30_150M;
     // let esm_model = ESM2Models::ESM2_T33_650M;
 
-    // let x = [']
     let esm2 = ESM2::new(esm_model).map_err(|e| e.to_string())?;
     let logits = esm2.run_model(&prot_seq).map_err(|e| e.to_string())?;
     let normed = esm2.extract_logits(&logits).map_err(|e| e.to_string())?;
