@@ -1,0 +1,26 @@
+name: "test-on-pr"
+on: [pull_request]
+
+jobs:
+  test-tauri:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [macos-latest, ubuntu-22.04, windows-latest]
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: install dependencies
+        run: bun install
+
+      - uses: tauri-apps/tauri-action@v0.5.11
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
