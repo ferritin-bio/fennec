@@ -1,8 +1,9 @@
 //! ESM2 Contact Map
 //!
-use anyhow::{Error as E, Result};
+use anyhow::Result;
 use ferritin_core::AtomCollection;
-use ferritin_onnx_models::{ESM2Models, LogitPosition, ESM2};
+use ferritin_onnx_models::{ESM2Models, ESM2};
+use ferritin_plms::types::PseudoProbability;
 use pdbtbx::{Format, ReadOptions};
 use std::io::BufReader;
 
@@ -21,7 +22,7 @@ pub fn aa3to1(aa: &str) -> char {
 }
 
 #[tauri::command]
-pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<LogitPosition>, String> {
+pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<PseudoProbability>, String> {
     let prot_seq = pdb_to_sequence(pdb_seq).map_err(|e| e.to_string())?;
     let esm_model = ESM2Models::ESM2_T6_8M;
     // let esm_model = ESM2Models::ESM2_T12_35M;
