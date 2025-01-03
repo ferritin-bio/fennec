@@ -1,12 +1,13 @@
 <script lang="ts">
     import * as Plot from "@observablehq/plot";
     import { invoke } from "@tauri-apps/api/core";
+    import type { PseudoProbability } from "../../types";
 
     const { pdbText = "", position = 0, temperature = 0.1 } = $props();
 
     let loading = $state(false);
     let error = $state(null);
-    let logits = $state([]);
+    let logits = $state<PseudoProbability[]>([]);
 
     $effect(() => {
         if (pdbText && position) fetchLogits();
