@@ -1,79 +1,63 @@
-//! ESM2 Contact Map
-//!
-use anyhow::Error as E;
-use ferritin_onnx_models::{ESM2Models, ESM2};
-use ndarray::Array2;
-use ort::{
-    execution_providers::CUDAExecutionProvider,
-    session::{builder::GraphOptimizationLevel, Session},
-};
-use std::env;
+//! Amplify CLI
+use candle_examples::device;
+use ferritin_core::AtomCollection;
+use ferritin_plms::{AmplifyModels, AmplifyRunner};
+use ferritin_plms::ligandmpnn::utilities::aa3to1;
+use ferritin_plms::types::{PseudoProbability,ContactMap};
+use pdbtbx::{Format, ReadOptions};
+use std::io::BufReader;
+use tauri::Error as TauriError;
 
-#[derive(Serialize)]
-pub struct LIGANDMPNN_LOGITS {
-    amino_acid_probs: Vec<serde_json::Value>,
+#[tauri::command]
+pub fn get_amplify_logits(pdb_text: &str) -> Result<Vec<PseudoProbability>, String> {
+    let pdb_bytes = pdb_text.as_bytes();
+    let reader = BufReader::new(pdb_bytes);
+    let (pdb, _error) = ReadOptions::default()
+        .set_format(Format::Mmcif)
+        .read_raw(reader)
+        .expect("Failed to parse PDB/CIF");
+    let ac = AtomCollection::from(&pdb);
+    let sequence = ac
+        .iter_residues_aminoacid()
+        .map(|res| res.res_name)
+        .map(|res3| aa3to1(&res3))
+        .collect::<String>();
+
+    let device = device(false).map_err(|e| e.to_string())?;
+    let model = "120M"; // this should be a param
+    let amp_model = match model{
+        "120M" => AmplifyModels::AMP120M,
+        "350M" => AmplifyModels::AMP350M,
+        &_ => panic!("Only 2 options"),
+    };
+    let amprunner = AmplifyRunner::load_model(amp_model, device).map_err(|e| e.to_string())?;
+    let pseudo_probabilities = amprunner.get_pseudo_probabilities(&sequence).map_err(|e| e.to_string())?;
+    Ok(pseudo_probabilities)
 }
 
 #[tauri::command]
-pub fn get_esm2_contact_map(prot_seq: &str) {
-    let args = Args::parse();
-    let base_path = env::current_dir()?;
-
-    // Create the ONNX Runtime environment, enabling CUDA execution providers for all sessions created in this process.
-    ort::init()
-        .with_name("ESM2")
-        .with_execution_providers([CUDAExecutionProvider::default().build()])
-        .commit()?;
-
-    let esm_model = ESM2Models::ESM2_T6_8M;
-    // let esm_model = ESM2Models::ESM2_T12_35M;
-    // let esm_model = ESM2Models::ESM2_T30_150M;
-    // let esm_model = ESM2Models::ESM2_T33_650M;
-
-    let model_path = ESM2::load_model_path(esm_model)?;
-
-    let model = Session::builder()?
-        .with_optimization_level(GraphOptimizationLevel::Level1)?
-        .with_intra_threads(1)?
-        .commit_from_file(model_path)?;
-
-    println!("Loading the Model and Tokenizer.......");
-    let tokenizer = ESM2::load_tokenizer()?;
-    let tokens = tokenizer
-        .encode(prot_seq.to_string(), false)
-        .map_err(E::msg)?
-        .get_ids()
-        .iter()
-        .map(|&x| x as i64)
-        .collect::<Vec<_>>();
-
-    // since we are taking a single string we set the first <batch> dimension == 1.
-    let shape = (1, tokens.len());
-    let mask_array: Array2<i64> = Array2::from_shape_vec(shape, vec![0; tokens.len()])?;
-    let tokens_array: Array2<i64> = Array2::from_shape_vec(shape, tokens)?;
-
-    // Input name: input_ids
-    // Input type: Tensor { ty: Int64, dimensions: [-1, -1], dimension_symbols: [Some("batch_size"), Some("sequence_length")] }
-    // Input name: attention_mask
-    // Input type: Tensor { ty: Int64, dimensions: [-1, -1], dimension_symbols: [Some("batch_size"), Some("sequence_length")] }
-    for input in &model.inputs {
-        println!("Input name: {}", input.name);
-        println!("Input type: {:?}", input.input_type);
-    }
-    let outputs =
-        model.run(ort::inputs!["input_ids" => tokens_array,"attention_mask" => mask_array]?)?;
-    // Print output names and shapes
-    // Output name: logits
-    for (name, tensor) in outputs.iter() {
-        println!("Output name: {}", name);
-        if let Ok(tensor) = tensor.try_extract_tensor::<f32>() {
-            //     <Batch> <SeqLength> <Vocab>
-            // Shape: [1, 256, 33]
-            println!("Shape: {:?}", tensor.shape());
-            println!(
-                "Sample values: {:?}",
-                &tensor.view().as_slice().unwrap()[..5]
-            ); // First 5 values
-        }
-    }
+pub fn get_amplify_contact_map(pdb_text: &str) -> Result<Vec<ContactMap>, String> {
+    let pdb_bytes = pdb_text.as_bytes();
+    let reader = BufReader::new(pdb_bytes);
+    let (pdb, _error) = ReadOptions::default()
+        .set_format(Format::Mmcif)
+        .read_raw(reader)
+        .expect("Failed to parse PDB/CIF");
+    let ac = AtomCollection::from(&pdb);
+    let sequence = ac
+        .iter_residues_aminoacid()
+        .map(|res| res.res_name)
+        .map(|res3| aa3to1(&res3))
+        .collect::<String>();
+    let device = device(false).map_err(|e| e.to_string())?;
+    let model = "120M"; // this should be a param
+    println!("Device: {:?}", &device);
+    let amp_model = match model{
+        "120M" => AmplifyModels::AMP120M,
+        "350M" => AmplifyModels::AMP350M,
+        &_ => panic!("Only 2 options"),
+    };
+    let amprunner = AmplifyRunner::load_model(amp_model, device).map_err(|e| e.to_string())?;
+    let contact_map = amprunner.get_contact_map(&sequence).map_err(|e| e.to_string())?;
+    Ok(contact_map)
 }

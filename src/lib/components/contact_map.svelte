@@ -1,8 +1,7 @@
 <script lang="ts">
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
-    import ESM2Logits from "$lib/components/structure_components/esm2_logits.svelte";
-    import AmplifyLogits from "$lib/components/structure_components/amplify_logits.svelte";
+    import ContactMap from "$lib/components/structure_components/contact_map.svelte";
 
     // Stateful Variables
     let pdbCode = $state("");
@@ -70,15 +69,9 @@
         <div class="space-y-6">
             {#if pdb_text}
                 <section>
-                    <h2 class="text-2xl font-bold mb-4">ESM2</h2>
+                    <h2 class="text-2xl font-bold mb-4">Amplify Contact Map</h2>
                     <div class="h-[400px] w-full">
-                        <ESM2Logits pdbText={pdb_text} />
-                    </div>
-                </section>
-                <section>
-                    <h2 class="text-2xl font-bold mb-4">Amplify</h2>
-                    <div class="h-[400px] w-full">
-                        <AmplifyLogits pdbText={pdb_text} />
+                        <ContactMap pdbText={pdb_text} />
                     </div>
                 </section>
             {/if}

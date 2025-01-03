@@ -19,8 +19,8 @@
         error = null;
 
         try {
-            logits = await invoke("get_esm2_logits", {
-                pdbSeq: pdbText,
+            logits = await invoke("get_amplify_logits", {
+                pdbText: pdbText,
             });
             console.log(logits);
         } catch (e) {
