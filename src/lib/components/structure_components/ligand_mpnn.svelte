@@ -65,7 +65,6 @@
                     grid: true,
                 },
             });
-
             node.innerHTML = "";
             node.appendChild(plot);
         }
