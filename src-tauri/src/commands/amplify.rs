@@ -1,79 +1,67 @@
-//! ESM2 Contact Map
-//!
+//! Amplify CLI
 use anyhow::Error as E;
-use ferritin_onnx_models::{ESM2Models, ESM2};
-use ndarray::Array2;
-use ort::{
-    execution_providers::CUDAExecutionProvider,
-    session::{builder::GraphOptimizationLevel, Session},
-};
-use std::env;
+use ferritin_plms::{AMPLIFY, AMPLIFYConfig}
+use tauri;
+use pdbtbx::{Format, ReadOptions};
+use serde::Serialize;
+use std::io::BufReader;
+use tauri::Error as TauriError;
+use anyhow::{Error as E, Result};
+use candle_core::{DType, Tensor, D};
+use candle_examples::device;
+use candle_hf_hub::{api::sync::Api, Repo, RepoType};
+use candle_nn::VarBuilder;
+use clap::Parser;
+use ferritin_plms::{AMPLIFYConfig as Config, AMPLIFY};
+use tokenizers::Tokenizer;
+
+pub const DTYPE: DType = DType::F32;
+// lifted from ferritin-plms::ligandMPNN
+//
+pub fn int_to_aa1(aa_int: u32) -> char {
+    match aa_int {
+        0 => 'A', 1 => 'C', 2 => 'D',
+        3 => 'E', 4 => 'F', 5 => 'G',
+        6 => 'H', 7 => 'I', 8 => 'K',
+        9 => 'L', 10 => 'M', 11 => 'N',
+        12 => 'P', 13 => 'Q', 14 => 'R',
+        15 => 'S', 16 => 'T', 17 => 'V',
+        18 => 'W', 19 => 'Y', 20 => 'X',
+        _ => 'X'
+    }
+}
 
 #[derive(Serialize)]
 pub struct LIGANDMPNN_LOGITS {
-    amino_acid_probs: Vec<serde_json::Value>,
+    amino_acid_probs: Vec<serde_json::Value>
 }
 
+
 #[tauri::command]
-pub fn get_esm2_contact_map(prot_seq: &str) {
-    let args = Args::parse();
-    let base_path = env::current_dir()?;
-
-    // Create the ONNX Runtime environment, enabling CUDA execution providers for all sessions created in this process.
-    ort::init()
-        .with_name("ESM2")
-        .with_execution_providers([CUDAExecutionProvider::default().build()])
-        .commit()?;
-
-    let esm_model = ESM2Models::ESM2_T6_8M;
-    // let esm_model = ESM2Models::ESM2_T12_35M;
-    // let esm_model = ESM2Models::ESM2_T30_150M;
-    // let esm_model = ESM2Models::ESM2_T33_650M;
-
-    let model_path = ESM2::load_model_path(esm_model)?;
-
-    let model = Session::builder()?
-        .with_optimization_level(GraphOptimizationLevel::Level1)?
-        .with_intra_threads(1)?
-        .commit_from_file(model_path)?;
-
-    println!("Loading the Model and Tokenizer.......");
-    let tokenizer = ESM2::load_tokenizer()?;
-    let tokens = tokenizer
-        .encode(prot_seq.to_string(), false)
-        .map_err(E::msg)?
-        .get_ids()
-        .iter()
-        .map(|&x| x as i64)
-        .collect::<Vec<_>>();
-
-    // since we are taking a single string we set the first <batch> dimension == 1.
-    let shape = (1, tokens.len());
-    let mask_array: Array2<i64> = Array2::from_shape_vec(shape, vec![0; tokens.len()])?;
-    let tokens_array: Array2<i64> = Array2::from_shape_vec(shape, tokens)?;
-
-    // Input name: input_ids
-    // Input type: Tensor { ty: Int64, dimensions: [-1, -1], dimension_symbols: [Some("batch_size"), Some("sequence_length")] }
-    // Input name: attention_mask
-    // Input type: Tensor { ty: Int64, dimensions: [-1, -1], dimension_symbols: [Some("batch_size"), Some("sequence_length")] }
-    for input in &model.inputs {
-        println!("Input name: {}", input.name);
-        println!("Input type: {:?}", input.input_type);
+pub fn get_ligmpnn_logits(pdb_text: &str, position: i64, temp: f32) -> Result<LIGANDMPNN_LOGITS, TauriError> {
+    let pdb_bytes = pdb_text.as_bytes();
+    let logits = process_pdb_bytes(pdb_bytes, temp, position)?;
+    let mut amino_acid_probs = Vec::new();
+    for i in 0..21 {
+        amino_acid_probs.push(serde_json::json!({
+            "amino_acid": int_to_aa1(i).to_string(),
+            "pseudo_prob": logits[i as usize]
+        }));
     }
-    let outputs =
-        model.run(ort::inputs!["input_ids" => tokens_array,"attention_mask" => mask_array]?)?;
-    // Print output names and shapes
-    // Output name: logits
-    for (name, tensor) in outputs.iter() {
-        println!("Output name: {}", name);
-        if let Ok(tensor) = tensor.try_extract_tensor::<f32>() {
-            //     <Batch> <SeqLength> <Vocab>
-            // Shape: [1, 256, 33]
-            println!("Shape: {:?}", tensor.shape());
-            println!(
-                "Sample values: {:?}",
-                &tensor.view().as_slice().unwrap()[..5]
-            ); // First 5 values
-        }
-    }
+
+    Ok(LIGANDMPNN_LOGITS { amino_acid_probs })
+}
+
+fn process_pdb_bytes(pdb_bytes: &[u8], temp: f32, position: i64) -> anyhow::Result<Vec<f32>> {
+    let reader = BufReader::new(pdb_bytes);
+    let (pdb, _error) = ReadOptions::default()
+        .set_format(Format::Mmcif)
+        .read_raw(reader)
+        .expect("Failed to parse PDB/CIF");
+    let ac = AtomCollection::from(&pdb);
+    let model = LigandMPNN::new().unwrap();
+    let logits = model.run_model(ac, position, temp)?;
+    let logits = candle_nn::ops::softmax(&logits, 1)?;
+    let logits = logits.get(0)?.to_vec1()?;
+    Ok(logits)
 }
