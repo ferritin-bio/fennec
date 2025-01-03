@@ -1,29 +1,38 @@
 //! Amplify CLI
+use candle_examples::device;
+use ferritin_core::AtomCollection;
 use ferritin_plms::{AmplifyModels, AmplifyRunner}
-use tauri;
+use ferritin_plms::types::PseudoProbability;
 use pdbtbx::{Format, ReadOptions};
+use tauri;
 
 
 #[tauri::command]
-pub fn get_ligmpnn_logits(pdb_text: &str, position: i64, temp: f32) -> Result<LIGANDMPNN_LOGITS, TauriError> {
-    let pdb_bytes = pdb_text.as_bytes();
-    let reader = BufReader::new(pdb_bytes);
-    let (pdb, _error) = ReadOptions::default()
-        .set_format(Format::Mmcif)
-        .read_raw(reader)
-        .expect("Failed to parse PDB/CIF");
-    let ac = AtomCollection::from(&pdb);
-    let model = LigandMPNN::new().unwrap();
-    let logits = model.run_model(ac, position, temp)?;
-    let logits = candle_nn::ops::softmax(&logits, 1)?;
-    let logits = logits.get(0)?.to_vec1()?;
-    let mut amino_acid_probs = Vec::new();
-    for i in 0..21 {
-        amino_acid_probs.push(serde_json::json!({
-            "amino_acid": int_to_aa1(i).to_string(),
-            "pseudo_prob": logits[i as usize]
-        }));
-    }
+pub fn get_amplify_logits(pdb_text: &str, position: i64, temp: f32) -> Result<PseudoProbability, TauriError> {
+    let device = device(false)?;
+    let model = "120M";
+    let amp_model = match model.as_str() {
+        "120M" => AmplifyModels::AMP120M,
+        "350M" => AmplifyModels::AMP350M,
+        &_ => panic!("Only 2 options"),
+    };
 
-    Ok(LIGANDMPNN_LOGITS { amino_acid_probs })
+
+    let amprunner = AmplifyRunner::load_model(amp_model, device)?;
+    let prot_sequence = args.protein_string.unwrap();
+
+    // Runs the model and returns the full, manipulateable result
+    let outputs = amprunner.run_forward(&prot_sequence);
+    // Runs the model and returns the top hit from each logit
+    let top_hit = amprunner.get_best_prediction(&prot_sequence);
+    // Runs the model and returns the top probabilities
+    let get_probabilities = amprunner.get_pseudo_probabilities(&prot_sequence);
+    // Runs the model and returns the contactmap
+    let contact_map = amprunner.get_contact_map(&prot_sequence);
+
+    Ok(PseudoProbability)
 }
+
+#[tauri::command]
+pub fn get_amplify_contact_map(pdb_text: &str, position: i64, temp: f32) -> Result<PseudoProbability, TauriError> {
+    todo!()}

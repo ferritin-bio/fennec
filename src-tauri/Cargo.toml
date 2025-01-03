@@ -20,6 +20,7 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 anyhow = "1.0"
 candle-nn = "0.8.1"
+candle-examples = "0.8.1"
 ndarray = "0.16"
 ort = "=2.0.0-rc.9"
 pdbtbx = "0.12.0"
