@@ -1,8 +1,6 @@
 <script lang="ts">
-    import { onMount } from "svelte";
     import { Input } from "$lib/components/ui/input/index.js";
     import { Button } from "$lib/components/ui/button/index.js";
-    import { Slider } from "$lib/components/ui/slider/index.js";
     import ESM2Logits from "$lib/components/structure_components/esm2_logits.svelte";
 
     // Stateful Variables
@@ -25,10 +23,6 @@
                 throw new Error(`Failed to fetch: ${response.statusText}`);
 
             pdb_text = await response.text();
-            window.miew_viewer.load(pdb_text, {
-                format: "cif",
-                sourceType: "immediate",
-            });
         } catch (err) {
             error =
                 "Failed to load structure. Please check the PDB code and try again.";
@@ -71,22 +65,26 @@
         <p class="text-red-500 mt-2">{error}</p>
     {/if}
 
-    <div class="flex flex-row w-full h-full my-4">
-        <div class="w-1/3">
-            <h2 class="text-2xl font-bold mb-4">LigMPNN Predictions</h2>
-        </div>
+    <div class="flex-1 overflow-auto p-4">
+        <div class="space-y-6">
+            <section>
+                <h2 class="text-2xl font-bold mb-4">LigMPNN Predictions</h2>
+                <!-- Add your LigMPNN content here -->
+            </section>
 
-        <div class="w-1/3">
-            <h2 class="text-2xl font-bold mb-4">ESM2</h2>
-            {#if pdb_text}
-                <div class="text-sm text-gray-700">
-                    <ESM2Logits pdbText={pdb_text} />
-                </div>
-            {/if}
-        </div>
+            <section>
+                <h2 class="text-2xl font-bold mb-4">ESM2</h2>
+                {#if pdb_text}
+                    <div class="h-[400px] w-full">
+                        <ESM2Logits pdbText={pdb_text} />
+                    </div>
+                {/if}
+            </section>
 
-        <div class="w-1/3">
-            <h2 class="text-2xl font-bold mb-4">Amplify</h2>
+            <section>
+                <h2 class="text-2xl font-bold mb-4">Amplify</h2>
+                <!-- Add your Amplify content here -->
+            </section>
         </div>
     </div>
 </div>

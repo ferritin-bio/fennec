@@ -3,13 +3,22 @@
 use anyhow::{Error as E, Result};
 use ferritin_core::AtomCollection;
 use ferritin_onnx_models::{ESM2Models, LogitPosition, ESM2};
-use ort::{
-    execution_providers::CUDAExecutionProvider,
-    session::{builder::GraphOptimizationLevel, Session},
-};
 use pdbtbx::{Format, ReadOptions};
-use std::env;
 use std::io::BufReader;
+
+#[rustfmt::skip]
+// todo: better utility library
+pub fn aa3to1(aa: &str) -> char {
+    match aa {
+        "ALA" => 'A', "CYS" => 'C', "ASP" => 'D',
+        "GLU" => 'E', "PHE" => 'F', "GLY" => 'G',
+        "HIS" => 'H', "ILE" => 'I', "LYS" => 'K',
+        "LEU" => 'L', "MET" => 'M', "ASN" => 'N',
+        "PRO" => 'P', "GLN" => 'Q', "ARG" => 'R',
+        "SER" => 'S', "THR" => 'T', "VAL" => 'V',
+        "TRP" => 'W', "TYR" => 'Y', _     => 'X',
+    }
+}
 
 #[tauri::command]
 pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<LogitPosition>, String> {
@@ -22,6 +31,7 @@ pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<LogitPosition>, String> {
     let esm2 = ESM2::new(esm_model).map_err(|e| e.to_string())?;
     let logits = esm2.run_model(&prot_seq).map_err(|e| e.to_string())?;
     let normed = esm2.extract_logits(&logits).map_err(|e| e.to_string())?;
+    // println!("Normed: {:?}", normed);
     Ok(normed)
 }
 
@@ -32,5 +42,12 @@ fn pdb_to_sequence(prot_seq: &str) -> Result<String> {
         .read_raw(reader)
         .expect("Failed to parse PDB/CIF");
     let ac = AtomCollection::from(&pdb);
-    Ok(ac.get_resnames().join(""))
+    let sequence = ac
+        .iter_residues_aminoacid()
+        .map(|res| res.res_name)
+        .map(|res3| aa3to1(&res3))
+        .collect::<String>();
+
+    println!("Sequence: {:?}", sequence);
+    Ok(sequence)
 }

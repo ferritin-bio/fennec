@@ -2,8 +2,6 @@
     import * as Plot from "@observablehq/plot";
     import { invoke } from "@tauri-apps/api/core";
 
-    const { pdbText = "" } = $props();
-
     type LogitPosition = {
         position: number; // Position in sequence
         amino_acid: string; // Index in vocabulary (0-32)
@@ -12,6 +10,8 @@
 
     type LogitPositions = LogitPosition[];
 
+    // State + stateful ----------------------------
+    const { pdbText = "" } = $props();
     let loading = $state(false);
     let error = $state(null);
     let logits = $state([]);
@@ -29,6 +29,7 @@
             logits = await invoke("get_esm2_logits", {
                 pdbSeq: pdbText,
             });
+            console.log(logits);
         } catch (e) {
             error = e.message;
             console.error("Error fetching logits:", e);
@@ -45,6 +46,7 @@
                 width: node.clientWidth,
                 height: node.clientHeight,
                 margin: 20,
+                color: { type: "linear", scheme: "PiYG" },
                 style: {
                     width: "100%",
                     height: "100%",
@@ -52,21 +54,12 @@
                     overflow: "visible",
                 },
                 marks: [
-                    Plot.rect(logits || [], {
+                    Plot.cell(logits || [], {
                         x: "position",
-                        y: "position",
+                        y: "amino_acid",
                         fill: "score",
-                        rx: 2,
                     }),
-                    Plot.ruleY([0]),
                 ],
-                x: {
-                    tickRotate: -45,
-                    labelOffset: 35,
-                },
-                y: {
-                    grid: true,
-                },
             });
 
             node.innerHTML = "";
@@ -99,7 +92,7 @@
 <style>
     .plot-container {
         width: 100%;
-        height: 100%;
+        /* height: 100%; */
         max-height: 450px;
         position: relative;
     }

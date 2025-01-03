@@ -1215,7 +1215,7 @@ dependencies = [
 [[package]]
 name = "ferritin-core"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#50930fa3ff8691102549bac752e870a16960f236"
+source = "git+https://github.com/zachcp/ferritin.git?branch=20250102-amplify#fa4e8f31a5d2052fb97010ba8bb00ded840ac4fb"
 dependencies = [
  "candle-core",
  "itertools 0.13.0",
@@ -1227,7 +1227,7 @@ dependencies = [
 [[package]]
 name = "ferritin-onnx-models"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#50930fa3ff8691102549bac752e870a16960f236"
+source = "git+https://github.com/zachcp/ferritin.git?branch=20250102-amplify#fa4e8f31a5d2052fb97010ba8bb00ded840ac4fb"
 dependencies = [
  "anyhow",
  "candle-core",
@@ -4993,12 +4993,13 @@ dependencies = [
 
 [[package]]
 name = "tempfile"
-version = "3.14.0"
+version = "3.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "28cce251fcbc87fac86a866eeb0d6c2d536fc16d06f184bb61aeae11aa4cee0c"
+checksum = "9a8a559c81686f576e8cd0290cd2a24a2a9ad80c98b3478856500fcbd7acd704"
 dependencies = [
  "cfg-if",
  "fastrand",
+ "getrandom 0.2.15",
  "once_cell",
  "rustix",
  "windows-sys 0.59.0",
