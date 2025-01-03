@@ -45,7 +45,7 @@
                 width: node.clientWidth,
                 height: node.clientHeight,
                 margin: 20,
-                color: { type: "linear", scheme: "PiYG" },
+                color: { type: "linear", scheme: "Ylgn" },
                 style: {
                     width: "100%",
                     height: "100%",
