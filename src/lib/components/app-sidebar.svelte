@@ -22,6 +22,11 @@
             url: "/sequence_logits",
             icon: Molecule,
         },
+        {
+            title: "Contact Map",
+            url: "/contact_map",
+            icon: Molecule,
+        },
     ];
 
     const utilityItems = [

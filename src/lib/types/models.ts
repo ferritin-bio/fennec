@@ -9,3 +9,15 @@ export interface PseudoProbability {
   /** Logit score representing the pseudo-probability */
   pseudo_prob: number;
 }
+
+/**
+ * Represents a single point in the ContactMap
+ */
+export interface ContactMap {
+  position_1: number;
+  position_2: number;
+  amino_acid_1: string;
+  amino_acid_2: string;
+  layer: number;
+  contact_estimate: number;
+}
