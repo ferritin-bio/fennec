@@ -40,7 +40,6 @@
 
     function myplot(node) {
         let plot;
-
         function createPlot() {
             plot = Plot.plot({
                 width: node.clientWidth,
@@ -52,6 +51,18 @@
                     height: "100%",
                     background: "transparent",
                     overflow: "visible",
+                },
+                y: {
+                    label: "Amino Acid →",
+                    labelOffset: 30,
+                },
+                x: {
+                    tickFormat: "",
+                    labelOffset: 30,
+                    ticks: (logits || []).reduce((acc, curr) => {
+                        const pos = curr.position;
+                        return pos % 10 === 0 ? [...acc, pos] : acc;
+                    }, []),
                 },
                 marks: [
                     Plot.cell(logits || [], {

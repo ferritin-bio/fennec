@@ -28,11 +28,18 @@ pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<LogitPosition>, String> {
     // let esm_model = ESM2Models::ESM2_T30_150M;
     // let esm_model = ESM2Models::ESM2_T33_650M;
 
+    // let x = [']
     let esm2 = ESM2::new(esm_model).map_err(|e| e.to_string())?;
     let logits = esm2.run_model(&prot_seq).map_err(|e| e.to_string())?;
     let normed = esm2.extract_logits(&logits).map_err(|e| e.to_string())?;
-    // println!("Normed: {:?}", normed);
-    Ok(normed)
+    let filtered = normed
+        .into_iter()
+        .filter(|logit| logit.amino_acid.is_alphabetic())
+        .filter(|logit| logit.amino_acid != 'X')
+        .filter(|logit| logit.amino_acid != 'B')
+        .filter(|logit| logit.amino_acid != 'Z')
+        .collect();
+    Ok(filtered)
 }
 
 fn pdb_to_sequence(prot_seq: &str) -> Result<String> {
