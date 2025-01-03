@@ -2,13 +2,13 @@
     import * as Plot from "@observablehq/plot";
     import { invoke } from "@tauri-apps/api/core";
 
-    type LogitPosition = {
+    type PseudoProbability = {
         position: number; // Position in sequence
         amino_acid: string; // Index in vocabulary (0-32)
-        score: number; // Logit score
+        pseudo_prob: number; // Logit score
     };
 
-    type LogitPositions = LogitPosition[];
+    type PseudoProbabilities = PseudoProbability[];
 
     // State + stateful ----------------------------
     const { pdbText = "" } = $props();
@@ -68,7 +68,7 @@
                     Plot.cell(logits || [], {
                         x: "position",
                         y: "amino_acid",
-                        fill: "score",
+                        fill: "pseudo_prob",
                     }),
                 ],
             });

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     import * as Plot from "@observablehq/plot";
     import { invoke } from "@tauri-apps/api/core";
 
