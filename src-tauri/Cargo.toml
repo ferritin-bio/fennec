@@ -1,8 +1,8 @@
 [package]
 name = "fennec"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "Local-First Protein App"
+authors = ["zach charlop-powers"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -20,9 +20,11 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 anyhow = "1.0"
 candle-nn = "0.8.1"
+ndarray = "0.16"
+ort = "=2.0.0-rc.9"
 pdbtbx = "0.12.0"
-ferritin-core = { git = "https://github.com/zachcp/ferritin.git", package = "ferritin-core" }
-ferritin-onnx-models = { git = "https://github.com/zachcp/ferritin.git", package = "ferritin-onnx-models" }
+ferritin-core = { git = "https://github.com/zachcp/ferritin.git", package = "ferritin-core", branch = "20250102-amplify" }
+ferritin-onnx-models = { git = "https://github.com/zachcp/ferritin.git", package = "ferritin-onnx-models", branch = "20250102-amplify" }
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }

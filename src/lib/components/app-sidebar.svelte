@@ -13,8 +13,13 @@
     // Menu items for viewers
     const viewerItems = [
         {
-            title: "Explore Structures",
-            url: "/",
+            title: "Explore Structures: LigandMPNN",
+            url: "/structure_logits",
+            icon: Molecule,
+        },
+        {
+            title: "Sequence Logits",
+            url: "/sequence_logits",
             icon: Molecule,
         },
     ];

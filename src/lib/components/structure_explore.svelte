@@ -70,7 +70,7 @@
     <header class="flex h-16 shrink-0 items-center gap-2 border-b px-4">
         <form
             class="flex w-full max-w-sm items-center space-x-2"
-            on:submit={handleSubmit}
+            onsubmit={handleSubmit}
         >
             <Input
                 type="text"
@@ -103,7 +103,7 @@
         <p class="text-red-500 mt-2">{error}</p>
     {/if}
 
-    <div class="flex flex-row w-full h-full">
+    <div class="flex flex-row w-full h-full my-4">
         <div class="w-1/2">
             <h2 class="text-2xl font-bold mb-4">Structure</h2>
             <div id="miew" class="miew-container w-full"></div>
