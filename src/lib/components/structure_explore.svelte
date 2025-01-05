@@ -149,9 +149,6 @@
     .slider-container {
         @apply bg-gray-100 p-4 rounded-lg mb-4;
     }
-    .slider-header {
-        @apply flex justify-between items-center mb-2 font-medium;
-    }
     .temperature-value {
         @apply text-gray-600 font-mono;
     }
