@@ -40,6 +40,7 @@ tauri-plugin-opener = "2"
 tokenizers = { version = "0.21.0", features = ["onig"] }
 
 
+
 [target.'cfg(target_os = "macos")'.dependencies]
 candle-core = { version = "0.8.1", features = ["metal"] }
 candle-examples = { version = "0.8.1", features = ["metal"] }
