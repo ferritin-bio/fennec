@@ -6,7 +6,6 @@ use ferritin_plms::ligandmpnn::utilities::aa3to1;
 use ferritin_plms::types::{PseudoProbability,ContactMap};
 use pdbtbx::{Format, ReadOptions};
 use std::io::BufReader;
-use tauri::Error as TauriError;
 
 #[tauri::command]
 pub fn get_amplify_logits(pdb_text: &str) -> Result<Vec<PseudoProbability>, String> {
