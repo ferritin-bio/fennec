@@ -1,0 +1,6 @@
+[target.'cfg(target_os = "macos")']
+rustflags = ["--cfg", "feature=\"metal\""]
+
+
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-Ctarget-feature=+crt-static"]
