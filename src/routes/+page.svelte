@@ -47,16 +47,14 @@
                 Ferritin <a
                     href="https://github.com/ferritin-bio/ferritin"
                     target="_blank"
-                    rel="noopener noreferrer"
-                    >https://github.com/ferritin-bio/ferritin</a
+                    rel="noopener noreferrer">The Ferritin Github Repo</a
                 >
             </p>
             <p class="text-slate-600">
                 Fennec <a
                     href="https://github.com/ferritin-bio/fennec"
                     target="_blank"
-                    rel="noopener noreferrer"
-                    >https://github.com/ferritin-bio/fennec</a
+                    rel="noopener noreferrer">The Fennec Github Repo</a
                 >
             </p>
         </div>
@@ -65,21 +63,34 @@
         >
             <h3 class="text-lg font-semibold mb-2">Contribute</h3>
             <p class="text-slate-600">
-                Ferritin <a
+                <a
                     href="https://github.com/ferritin-bio/ferritin/issues"
                     target="_blank"
                     rel="noopener noreferrer"
-                    >https://github.com/ferritin-bio/ferritin/issues</a
-                >
+                    >Ferritin:
+                </a> File an issue or start a discussion here
             </p>
             <p class="text-slate-600">
-                Fennec <a
+                <a
                     href="https://github.com/ferritin-bio/ferritin/issues"
                     target="_blank"
+                    rel="noopener noreferrer">Fennec:</a
+                > Feedback on this application
+            </p>
+            <p class="text-slate-600">
+                <a
+                    href="https://ferritin-bio.github.io/protein-language-models/"
+                    target="_blank"
                     rel="noopener noreferrer"
-                    >https://github.com/ferritin-bio/ferritin/issues</a
-                >
+                    >Protein-Language-Models:
+                </a> Review / contribute to protien language models here.
             </p>
         </div>
     </div>
 </div>
+
+<style>
+    a {
+        color: orange;
+    }
+</style>
