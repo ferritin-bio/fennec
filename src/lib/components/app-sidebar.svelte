@@ -76,7 +76,7 @@
             </Sidebar.GroupContent>
         </Sidebar.Group>
 
-        <Sidebar.Group>
+        <!-- <Sidebar.Group>
             <Sidebar.GroupLabel>Utilities</Sidebar.GroupLabel>
             <Sidebar.GroupContent>
                 <Sidebar.Menu>
@@ -100,6 +100,7 @@
                 </Sidebar.Menu>
             </Sidebar.GroupContent>
         </Sidebar.Group>
+         -->
     </Sidebar.Content>
 </Sidebar.Root>
 

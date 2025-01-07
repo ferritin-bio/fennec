@@ -44,10 +44,20 @@
         >
             <h3 class="text-lg font-semibold mb-2">Links</h3>
             <p class="text-slate-600">
-                Ferritin https://github.com/ferritin-bio/ferritin
+                Ferritin <a
+                    href="https://github.com/ferritin-bio/ferritin"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >https://github.com/ferritin-bio/ferritin</a
+                >
             </p>
             <p class="text-slate-600">
-                Fennec https://github.com/ferritin-bio/fennec
+                Fennec <a
+                    href="https://github.com/ferritin-bio/fennec"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >https://github.com/ferritin-bio/fennec</a
+                >
             </p>
         </div>
         <div
@@ -55,10 +65,20 @@
         >
             <h3 class="text-lg font-semibold mb-2">Contribute</h3>
             <p class="text-slate-600">
-                Ferritin https://github.com/ferritin-bio/ferritin/issues
+                Ferritin <a
+                    href="https://github.com/ferritin-bio/ferritin/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >https://github.com/ferritin-bio/ferritin/issues</a
+                >
             </p>
             <p class="text-slate-600">
-                Fennec https://github.com/ferritin-bio/ferritin/issues
+                Fennec <a
+                    href="https://github.com/ferritin-bio/ferritin/issues"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >https://github.com/ferritin-bio/ferritin/issues</a
+                >
             </p>
         </div>
     </div>
