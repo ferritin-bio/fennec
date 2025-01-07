@@ -46,7 +46,7 @@
 <Sidebar.Root>
     <Sidebar.Content>
         <Sidebar.Header>
-            <Button variant="outline" style="min-height: 50px">
+            <Button variant="outline" style="min-height: 50px" href="/">
                 <img src="/app-icon.png" alt="Fennec" class="mr-2 size-6" />
                 <span style="font-size: 16px">Fennec. Local-First ML </span>
             </Button>
@@ -76,7 +76,7 @@
             </Sidebar.GroupContent>
         </Sidebar.Group>
 
-        <Sidebar.Group>
+        <!-- <Sidebar.Group>
             <Sidebar.GroupLabel>Utilities</Sidebar.GroupLabel>
             <Sidebar.GroupContent>
                 <Sidebar.Menu>
@@ -100,6 +100,7 @@
                 </Sidebar.Menu>
             </Sidebar.GroupContent>
         </Sidebar.Group>
+         -->
     </Sidebar.Content>
 </Sidebar.Root>
 
