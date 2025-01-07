@@ -1439,7 +1439,7 @@ dependencies = [
 [[package]]
 name = "ferritin-core"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#208a76649b2209715d969a7a040260ccb438e534"
+source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.1.0#2ccbc788dfb1dde26143eec92443cb97b1909687"
 dependencies = [
  "candle-core",
  "itertools 0.14.0",
@@ -1451,14 +1451,14 @@ dependencies = [
 [[package]]
 name = "ferritin-onnx-models"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#208a76649b2209715d969a7a040260ccb438e534"
+source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.1.0#2ccbc788dfb1dde26143eec92443cb97b1909687"
 dependencies = [
  "anyhow",
  "candle-core",
- "candle-hf-hub",
  "candle-nn",
  "ferritin-core",
  "ferritin-plms",
+ "hf-hub",
  "ndarray",
  "ndarray-safetensors",
  "ort",
@@ -1470,17 +1470,17 @@ dependencies = [
 [[package]]
 name = "ferritin-plms"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#208a76649b2209715d969a7a040260ccb438e534"
+source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.1.0#2ccbc788dfb1dde26143eec92443cb97b1909687"
 dependencies = [
  "anyhow",
  "candle-core",
- "candle-hf-hub",
  "candle-metal-kernels",
  "candle-nn",
  "candle-transformers",
  "clap",
  "ferritin-core",
  "ferritin-test-data",
+ "hf-hub",
  "itertools 0.14.0",
  "pdbtbx",
  "rand 0.8.5",
@@ -1493,7 +1493,7 @@ dependencies = [
 [[package]]
 name = "ferritin-test-data"
 version = "0.1.0"
-source = "git+https://github.com/zachcp/ferritin.git#208a76649b2209715d969a7a040260ccb438e534"
+source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.1.0#2ccbc788dfb1dde26143eec92443cb97b1909687"
 dependencies = [
  "tempfile",
 ]
@@ -2204,6 +2204,28 @@ name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
+
+[[package]]
+name = "hf-hub"
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "112fa2f6ad4ab815b9e1b938b4b1e437032d055e2f92ed10fd6ab2e62d02c6b6"
+dependencies = [
+ "dirs",
+ "futures",
+ "http",
+ "indicatif",
+ "log",
+ "native-tls",
+ "num_cpus",
+ "rand 0.8.5",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror 2.0.9",
+ "tokio",
+ "ureq",
+]
 
 [[package]]
 name = "html5ever"
@@ -4570,9 +4592,9 @@ dependencies = [
 
 [[package]]
 name = "serde_json"
-version = "1.0.134"
+version = "1.0.135"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d00f4175c42ee48b15416f6193a959ba3a0d67fc699a0db9ad12df9f83991c7d"
+checksum = "2b0d7ba2887406110130a978386c4e1befb98c674b4fba677954e4db976630d9"
 dependencies = [
  "itoa 1.0.14",
  "memchr",
@@ -5853,6 +5875,7 @@ dependencies = [
  "base64 0.22.1",
  "flate2",
  "log",
+ "native-tls",
  "once_cell",
  "rustls",
  "rustls-pki-types",
