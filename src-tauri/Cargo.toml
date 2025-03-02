@@ -3,7 +3,7 @@ name = "fennec"
 version = "0.1.0"
 description = "Local-First Protein App"
 authors = ["zach charlop-powers"]
-edition = "2021"
+edition = "2024"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
