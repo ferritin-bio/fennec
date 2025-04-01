@@ -20,10 +20,10 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 anyhow = "1.0"
-candle-core = "0.8.3"
-candle-examples = "0.8.3"
-candle-nn = "0.8.3"
-candle-transformers = "0.8.3"
+candle-core = "0.8.4"
+candle-examples = "0.8.4"
+candle-nn = "0.8.4"
+candle-transformers = "0.8.4"
 ndarray = "0.16"
 ort = "=2.0.0-rc.9"
 pdbtbx = "0.12.0"
@@ -31,18 +31,18 @@ ferritin-core = { git = "https://github.com/ferritin-bio/ferritin.git", package 
 ferritin-onnx-models = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-onnx-models", tag = "v0.1.0" }
 ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-plms", tag = "v0.1.0" }
 serde = { version = "1", features = ["derive"] }
-serde_json = "1.0.139"
+serde_json = "1.0.140"
 tauri = { version = "2", features = [] }
 tauri-plugin-opener = "2"
-tokenizers = { version = "0.21.0", features = ["onig"] }
+tokenizers = { version = "0.21.1", features = ["onig"] }
 
 
 [target.'cfg(target_os = "macos")'.dependencies]
-candle-core = { version = "0.8.3", features = ["metal"] }
-candle-examples = { version = "0.8.3", features = ["metal"] }
-candle-nn = { version = "0.8.3", features = ["metal"] }
-candle-transformers = { version = "0.8.3", features = ["metal"] }
-candle-metal-kernels = "0.8.3"
+candle-core = { version = "0.8.4", features = ["metal"] }
+candle-examples = { version = "0.8.4", features = ["metal"] }
+candle-nn = { version = "0.8.4", features = ["metal"] }
+candle-transformers = { version = "0.8.4", features = ["metal"] }
+candle-metal-kernels = "0.8.4"
 
 
 [features]
