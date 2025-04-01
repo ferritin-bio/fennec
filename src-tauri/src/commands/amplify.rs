@@ -1,9 +1,9 @@
 //! Amplify CLI
 use candle_examples::device;
 use ferritin_core::AtomCollection;
-use ferritin_plms::{AmplifyModels, AmplifyRunner};
 use ferritin_plms::ligandmpnn::utilities::aa3to1;
-use ferritin_plms::types::{PseudoProbability,ContactMap};
+use ferritin_plms::types::{ContactMap, PseudoProbability};
+use ferritin_plms::{AmplifyModels, AmplifyRunner};
 use pdbtbx::{Format, ReadOptions};
 use std::io::BufReader;
 
@@ -24,13 +24,15 @@ pub fn get_amplify_logits(pdb_text: &str) -> Result<Vec<PseudoProbability>, Stri
 
     let device = device(false).map_err(|e| e.to_string())?;
     let model = "120M"; // this should be a param
-    let amp_model = match model{
+    let amp_model = match model {
         "120M" => AmplifyModels::AMP120M,
         "350M" => AmplifyModels::AMP350M,
         &_ => panic!("Only 2 options"),
     };
     let amprunner = AmplifyRunner::load_model(amp_model, device).map_err(|e| e.to_string())?;
-    let pseudo_probabilities = amprunner.get_pseudo_probabilities(&sequence).map_err(|e| e.to_string())?;
+    let pseudo_probabilities = amprunner
+        .get_pseudo_probabilities(&sequence)
+        .map_err(|e| e.to_string())?;
     Ok(pseudo_probabilities)
 }
 
@@ -51,12 +53,14 @@ pub fn get_amplify_contact_map(pdb_text: &str) -> Result<Vec<ContactMap>, String
     let device = device(false).map_err(|e| e.to_string())?;
     let model = "120M"; // this should be a param
     println!("Device: {:?}", &device);
-    let amp_model = match model{
+    let amp_model = match model {
         "120M" => AmplifyModels::AMP120M,
         "350M" => AmplifyModels::AMP350M,
         &_ => panic!("Only 2 options"),
     };
     let amprunner = AmplifyRunner::load_model(amp_model, device).map_err(|e| e.to_string())?;
-    let contact_map = amprunner.get_contact_map(&sequence).map_err(|e| e.to_string())?;
+    let contact_map = amprunner
+        .get_contact_map(&sequence)
+        .map_err(|e| e.to_string())?;
     Ok(contact_map)
 }
