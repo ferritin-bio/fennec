@@ -651,9 +651,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "06ccf5ee3532e66868516d9b315f73aec9f34ea1a37ae98514534d458915dbf1"
 dependencies = [
  "byteorder",
+ "candle-metal-kernels",
  "gemm 0.17.1",
  "half",
  "memmap2",
+ "metal 0.27.0",
  "num-traits",
  "num_cpus",
  "rand 0.9.0",
@@ -662,6 +664,7 @@ dependencies = [
  "safetensors",
  "thiserror 1.0.69",
  "ug",
+ "ug-metal",
  "yoke",
  "zip",
 ]
@@ -693,7 +696,7 @@ version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "52c85c21827c28db94e7112e364abe7e0cf8d2b022c014edf08642be6b94f21e"
 dependencies = [
- "metal",
+ "metal 0.27.0",
  "once_cell",
  "thiserror 1.0.69",
  "tracing",
@@ -706,7 +709,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "be1160c3b63f47d40d91110a3e1e1e566ae38edddbbf492a60b40ffc3bc1ff38"
 dependencies = [
  "candle-core",
+ "candle-metal-kernels",
  "half",
+ "metal 0.27.0",
  "num-traits",
  "rayon",
  "safetensors",
@@ -1645,7 +1650,11 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "bio",
+ "candle-core",
  "candle-examples",
+ "candle-metal-kernels",
+ "candle-nn",
+ "candle-transformers",
  "ferritin-core",
  "ferritin-onnx-models",
  "ferritin-plms",
@@ -3425,6 +3434,21 @@ name = "metal"
 version = "0.27.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c43f73953f8cbe511f021b58f18c3ce1c3d1ae13fe953293e13345bf83217f25"
+dependencies = [
+ "bitflags 2.9.0",
+ "block",
+ "core-graphics-types 0.1.3",
+ "foreign-types 0.5.0",
+ "log",
+ "objc",
+ "paste",
+]
+
+[[package]]
+name = "metal"
+version = "0.29.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ecfd3296f8c56b7c1f6fbac3c71cefa9d78ce009850c45000015f206dc7fa21"
 dependencies = [
  "bitflags 2.9.0",
  "block",
@@ -6596,6 +6620,20 @@ dependencies = [
  "thiserror 1.0.69",
  "tracing",
  "yoke",
+]
+
+[[package]]
+name = "ug-metal"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a02ddc17bf32f7dcaaf016b6735f7198082b82f122df7b3ca15d8ead5911ccef"
+dependencies = [
+ "half",
+ "metal 0.29.0",
+ "objc",
+ "serde",
+ "thiserror 1.0.69",
+ "ug",
 ]
 
 [[package]]
