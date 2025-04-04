@@ -38,6 +38,16 @@
             url: "/bioinformatics/fasta-stats",
             icon: FileText,
         },
+        {
+            title: "DNA Translator",
+            url: "/bioinformatics/dna-translator",
+            icon: Dna,
+        },
+        {
+            title: "RNA Structure",
+            url: "/bioinformatics/rna-structure",
+            icon: Microscope,
+        },
         // Add more tools here as they are migrated
     ];
 

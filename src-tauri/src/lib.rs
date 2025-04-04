@@ -17,15 +17,16 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
-            get_ligmpnn_logits,
-            get_esm2_logits,
-            get_amplify_logits,
-            get_amplify_contact_map,
-            rnapkin_fn,
             check_restriction_sites,
             convert_fastq_to_fasta_tauri,
+            get_amplify_contact_map,
+            get_amplify_logits,
+            get_esm2_logits,
+            get_ligmpnn_logits,
             get_seqstats,
             get_stats,
+            rnapkin_fn,
+            translate_dna,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
