@@ -48,7 +48,37 @@
             url: "/bioinformatics/rna-structure",
             icon: Microscope,
         },
-        // Add more tools here as they are migrated
+        // Genomics visualization tools
+        {
+            title: "Chromosome Viewer",
+            url: "/bioinformatics/genomics/ideogram",
+            icon: Dna,
+        },
+        {
+            title: "IGV Browser",
+            url: "/bioinformatics/genomics/igv-browser",
+            icon: Microscope,
+        },
+        {
+            title: "MSA Viewer",
+            url: "/bioinformatics/genomics/msa-viewer",
+            icon: FileText,
+        },
+        {
+            title: "Genome Graph",
+            url: "/bioinformatics/genomics/genome-graph",
+            icon: Dna,
+        },
+        {
+            title: "Genome Ribbon",
+            url: "/bioinformatics/genomics/genome-ribbon",
+            icon: Dna,
+        },
+        {
+            title: "Gosling Visualizer",
+            url: "/bioinformatics/genomics/gosling",
+            icon: Microscope,
+        },
     ];
 
     const utilityItems = [
