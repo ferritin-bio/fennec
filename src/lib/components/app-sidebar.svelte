@@ -5,6 +5,8 @@
     import Molecule from "lucide-svelte/icons/component"; // Using component icon as a stand-in for molecule
     import SettingsIcon from "lucide-svelte/icons/settings"; // Changed to SettingsIcon
     import HelpIcon from "lucide-svelte/icons/help-circle"; // Changed to HelpIcon
+    import FileText from "lucide-svelte/icons/file-text"; // For FASTA files
+    import Dna from "lucide-svelte/icons/dna"; // For bioinformatics tools
     import * as Sidebar from "./ui/sidebar/index.js";
     import * as Card from "$lib/components/ui/card/index.js";
     import * as Avatar from "$lib/components/ui/avatar/index.js";
@@ -27,6 +29,16 @@
             url: "/contact_map",
             icon: Molecule,
         },
+    ];
+
+    // New bioinformatics tools from Observable
+    const bioInformaticsItems = [
+        {
+            title: "FASTA Statistics",
+            url: "/bioinformatics/fasta-stats",
+            icon: FileText,
+        },
+        // Add more tools here as they are migrated
     ];
 
     const utilityItems = [
@@ -56,6 +68,31 @@
             <Sidebar.GroupContent>
                 <Sidebar.Menu>
                     {#each viewerItems as item (item.title)}
+                        <Sidebar.MenuItem>
+                            <Sidebar.MenuButton>
+                                {#snippet child({ props })}
+                                    <a
+                                        href={item.url}
+                                        {...props}
+                                        class:active={$page.url.pathname ===
+                                            item.url}
+                                    >
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </a>
+                                {/snippet}
+                            </Sidebar.MenuButton>
+                        </Sidebar.MenuItem>
+                    {/each}
+                </Sidebar.Menu>
+            </Sidebar.GroupContent>
+        </Sidebar.Group>
+
+        <Sidebar.Group>
+            <Sidebar.GroupLabel>Bioinformatics Tools</Sidebar.GroupLabel>
+            <Sidebar.GroupContent>
+                <Sidebar.Menu>
+                    {#each bioInformaticsItems as item (item.title)}
                         <Sidebar.MenuItem>
                             <Sidebar.MenuButton>
                                 {#snippet child({ props })}
