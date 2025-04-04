@@ -21,42 +21,20 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 anyhow = "1.0"
 bio = "2.2.0"
-candle-core = "0.8.4"
 candle-examples = "0.8.4"
-candle-nn = "0.8.4"
-candle-transformers = "0.8.4"
 ferritin-core = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-core", tag = "v0.1.0" }
 ferritin-onnx-models = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-onnx-models", tag = "v0.1.0" }
 ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-plms", tag = "v0.1.0" }
-ndarray = "0.16"
 noodles-fasta = "0.50.0"
 noodles-fastq = "0.18.0"
-ort = "=2.0.0-rc.9"
 pdbtbx = "0.12.0"
 protein-translate = "0.2.0"
 rnapkin = "0.3.9"
 serde = { version = "1", features = ["derive"] }
-serde_json = "1.0.140"
 tauri = { version = "2", features = [] }
 tauri-plugin-dialog = "2.2.1"
 tauri-plugin-opener = "2"
 tempfile = "3.19.1"
-tokenizers = { version = "0.21.1", features = ["onig"] }
-# rnapkin = "0.3.9"
-# rnapkin = { git = "https://github.com/zachcp/rnapkin.git", ref = "20250401-bump" }
-# protein-translate = "0.2.0"
-
-
-[target.'cfg(target_os = "macos")'.dependencies]
-candle-core = { version = "0.8.4", features = ["metal"] }
-candle-examples = { version = "0.8.4", features = ["metal"] }
-candle-nn = { version = "0.8.4", features = ["metal"] }
-candle-transformers = { version = "0.8.4", features = ["metal"] }
-candle-metal-kernels = "0.8.4"
-
-
-[features]
-metal = ["ferritin-plms/metal"]
 
 
 [target.'cfg(target_os = "macos")'.features]

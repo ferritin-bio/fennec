@@ -7,9 +7,6 @@
     import HelpIcon from "lucide-svelte/icons/help-circle"; // Changed to HelpIcon
     import FileText from "lucide-svelte/icons/file-text"; // For FASTA files
     import Dna from "lucide-svelte/icons/dna"; // For bioinformatics tools
-    import * as Sidebar from "./ui/sidebar/index.js";
-    import * as Card from "$lib/components/ui/card/index.js";
-    import * as Avatar from "$lib/components/ui/avatar/index.js";
     import Button from "./ui/button/button.svelte";
 
     // Menu items for viewers

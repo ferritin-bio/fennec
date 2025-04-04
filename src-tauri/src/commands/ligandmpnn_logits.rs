@@ -22,7 +22,7 @@ pub fn get_ligmpnn_logits(
         .read_raw(reader)
         .expect("Failed to parse PDB/CIF");
     let ac = AtomCollection::from(&pdb);
-    let model = LigandMPNN::new().unwrap();
+    let model = LigandMPNN::new()?;
     let outputs = model.get_single_location(ac, temp, position)?;
     Ok(outputs)
 }

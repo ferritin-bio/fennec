@@ -133,8 +133,7 @@ mod tests {
         };
 
         let tree = forest::grow_tree(&pairlist);
-        let mut bubbles =
-            draw::gather_bubbles(&tree, &sequence, BUBBLE_RADIUS, 0.0_f64.to_radians());
+        let bubbles = draw::gather_bubbles(&tree, &sequence, BUBBLE_RADIUS, 0.0_f64.to_radians());
         let mirror = Mirror::new(false, false);
 
         let highlights = match pi.highlight {

@@ -107,7 +107,7 @@ pub fn get_seqstats(filename: String) -> SeqKitFastaData {
     let avg = (total / count) as f32;
 
     let stats = SeqKitFastaData {
-        filename: filename,
+        filename,
         format: "Fasta".to_string(),
         datatype: "DNA".to_string(),
         num_seqs: count,

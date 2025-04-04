@@ -9,7 +9,6 @@ pub struct REMatches {
     locations: Vec<usize>,
 }
 
-
 #[tauri::command]
 pub fn check_restriction_sites(sequence: &str) -> Vec<REMatches> {
     let text = sequence.as_bytes();
