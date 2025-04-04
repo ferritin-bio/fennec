@@ -2,7 +2,7 @@
 //!
 use anyhow::Result;
 use ferritin_core::AtomCollection;
-use ferritin_onnx_models::{ESM2Models, ESM2};
+use ferritin_onnx_models::{ESM2, ESM2Models};
 use ferritin_plms::ligandmpnn::utilities::aa3to1;
 use ferritin_plms::types::PseudoProbability;
 use pdbtbx::{Format, ReadOptions};

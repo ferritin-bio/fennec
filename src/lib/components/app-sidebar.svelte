@@ -5,9 +5,8 @@
     import Molecule from "lucide-svelte/icons/component"; // Using component icon as a stand-in for molecule
     import SettingsIcon from "lucide-svelte/icons/settings"; // Changed to SettingsIcon
     import HelpIcon from "lucide-svelte/icons/help-circle"; // Changed to HelpIcon
-    import * as Sidebar from "./ui/sidebar/index.js";
-    import * as Card from "$lib/components/ui/card/index.js";
-    import * as Avatar from "$lib/components/ui/avatar/index.js";
+    import FileText from "lucide-svelte/icons/file-text"; // For FASTA files
+    import Dna from "lucide-svelte/icons/dna"; // For bioinformatics tools
     import Button from "./ui/button/button.svelte";
 
     // Menu items for viewers
@@ -26,6 +25,56 @@
             title: "Contact Map",
             url: "/contact_map",
             icon: Molecule,
+        },
+    ];
+
+    // New bioinformatics tools from Observable
+    const bioInformaticsItems = [
+        {
+            title: "FASTA Statistics",
+            url: "/bioinformatics/fasta-stats",
+            icon: FileText,
+        },
+        {
+            title: "DNA Translator",
+            url: "/bioinformatics/dna-translator",
+            icon: Dna,
+        },
+        {
+            title: "RNA Structure",
+            url: "/bioinformatics/rna-structure",
+            icon: Microscope,
+        },
+        // Genomics visualization tools
+        {
+            title: "Chromosome Viewer",
+            url: "/bioinformatics/genomics/ideogram",
+            icon: Dna,
+        },
+        {
+            title: "IGV Browser",
+            url: "/bioinformatics/genomics/igv-browser",
+            icon: Microscope,
+        },
+        {
+            title: "MSA Viewer",
+            url: "/bioinformatics/genomics/msa-viewer",
+            icon: FileText,
+        },
+        {
+            title: "Genome Graph",
+            url: "/bioinformatics/genomics/genome-graph",
+            icon: Dna,
+        },
+        {
+            title: "Genome Ribbon",
+            url: "/bioinformatics/genomics/genome-ribbon",
+            icon: Dna,
+        },
+        {
+            title: "Gosling Visualizer",
+            url: "/bioinformatics/genomics/gosling",
+            icon: Microscope,
         },
     ];
 
@@ -56,6 +105,31 @@
             <Sidebar.GroupContent>
                 <Sidebar.Menu>
                     {#each viewerItems as item (item.title)}
+                        <Sidebar.MenuItem>
+                            <Sidebar.MenuButton>
+                                {#snippet child({ props })}
+                                    <a
+                                        href={item.url}
+                                        {...props}
+                                        class:active={$page.url.pathname ===
+                                            item.url}
+                                    >
+                                        <item.icon />
+                                        <span>{item.title}</span>
+                                    </a>
+                                {/snippet}
+                            </Sidebar.MenuButton>
+                        </Sidebar.MenuItem>
+                    {/each}
+                </Sidebar.Menu>
+            </Sidebar.GroupContent>
+        </Sidebar.Group>
+
+        <Sidebar.Group>
+            <Sidebar.GroupLabel>Bioinformatics Tools</Sidebar.GroupLabel>
+            <Sidebar.GroupContent>
+                <Sidebar.Menu>
+                    {#each bioInformaticsItems as item (item.title)}
                         <Sidebar.MenuItem>
                             <Sidebar.MenuButton>
                                 {#snippet child({ props })}
