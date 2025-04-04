@@ -8,6 +8,9 @@
     import FileText from "lucide-svelte/icons/file-text"; // For FASTA files
     import Dna from "lucide-svelte/icons/dna"; // For bioinformatics tools
     import Button from "./ui/button/button.svelte";
+    import * as Sidebar from "./ui/sidebar/index.js";
+    import * as Card from "$lib/components/ui/card/index.js";
+    import * as Avatar from "$lib/components/ui/avatar/index.js";
 
     // Menu items for viewers
     const viewerItems = [
