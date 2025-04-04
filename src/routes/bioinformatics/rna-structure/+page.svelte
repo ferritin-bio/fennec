@@ -1,5 +1,5 @@
 <script>
-  import RnaVisualizer from "$lib/components/RnaVisualizer.svelte";
+  import RnaVisualizer from "$lib/components/genomics/RnaVisualizer.svelte";
 </script>
 
 <div class="container mx-auto p-4">

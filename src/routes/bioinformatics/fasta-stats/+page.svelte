@@ -1,5 +1,5 @@
 <script>
-  import FastaStats from "$lib/components/FastaStats.svelte";
+  import FastaStats from "$lib/components/genomics/FastaStats.svelte";
 </script>
 
 <div class="container mx-auto p-4">

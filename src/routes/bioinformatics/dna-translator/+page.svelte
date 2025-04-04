@@ -1,5 +1,5 @@
 <script>
-  import DnaTranslator from "$lib/components/DnaTranslator.svelte";
+  import DnaTranslator from "$lib/components/genomics/DnaTranslator.svelte";
 </script>
 
 <div class="container mx-auto p-4">
