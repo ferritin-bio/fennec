@@ -646,37 +646,12 @@ dependencies = [
 
 [[package]]
 name = "candle-core"
-version = "0.8.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "06ccf5ee3532e66868516d9b315f73aec9f34ea1a37ae98514534d458915dbf1"
-dependencies = [
- "byteorder",
- "candle-metal-kernels 0.8.4",
- "gemm 0.17.1",
- "half",
- "memmap2",
- "metal 0.27.0",
- "num-traits",
- "num_cpus",
- "rand 0.9.0",
- "rand_distr 0.5.1",
- "rayon",
- "safetensors",
- "thiserror 1.0.69",
- "ug 0.1.0",
- "ug-metal 0.1.0",
- "yoke",
- "zip",
-]
-
-[[package]]
-name = "candle-core"
 version = "0.9.0-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a7bcb2a9a0a4d892dc27980054f8ab697612e4c2394bf3c3a4be7dc229cb3148"
 dependencies = [
  "byteorder",
- "candle-metal-kernels 0.9.0-alpha.1",
+ "candle-metal-kernels",
  "gemm 0.17.1",
  "half",
  "memmap2",
@@ -688,22 +663,22 @@ dependencies = [
  "rayon",
  "safetensors",
  "thiserror 1.0.69",
- "ug 0.2.0",
- "ug-metal 0.2.0",
+ "ug",
+ "ug-metal",
  "yoke",
  "zip",
 ]
 
 [[package]]
 name = "candle-examples"
-version = "0.8.4"
+version = "0.9.0-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "591e79861e0519bb7e5f425a7dac77582213aba9c6aa91f6e61729829fc1a2cd"
+checksum = "2cb7e5fbf29b506c3487edc8daf66ffa0150088a18b31df8daa12f9a69f1cade"
 dependencies = [
  "anyhow",
- "candle-core 0.8.4",
- "candle-nn 0.8.4",
- "candle-transformers 0.8.4",
+ "candle-core",
+ "candle-nn",
+ "candle-transformers",
  "csv",
  "hf-hub",
  "image 0.25.6",
@@ -713,18 +688,6 @@ dependencies = [
  "serde",
  "serde_json",
  "tokenizers",
-]
-
-[[package]]
-name = "candle-metal-kernels"
-version = "0.8.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "52c85c21827c28db94e7112e364abe7e0cf8d2b022c014edf08642be6b94f21e"
-dependencies = [
- "metal 0.27.0",
- "once_cell",
- "thiserror 1.0.69",
- "tracing",
 ]
 
 [[package]]
@@ -741,29 +704,12 @@ dependencies = [
 
 [[package]]
 name = "candle-nn"
-version = "0.8.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "be1160c3b63f47d40d91110a3e1e1e566ae38edddbbf492a60b40ffc3bc1ff38"
-dependencies = [
- "candle-core 0.8.4",
- "candle-metal-kernels 0.8.4",
- "half",
- "metal 0.27.0",
- "num-traits",
- "rayon",
- "safetensors",
- "serde",
- "thiserror 1.0.69",
-]
-
-[[package]]
-name = "candle-nn"
 version = "0.9.0-alpha.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4ad53130b88a67f351c7c7d15a7723c3a65e2675d75795d777ac8e5ce27f4e76"
 dependencies = [
- "candle-core 0.9.0-alpha.1",
- "candle-metal-kernels 0.9.0-alpha.1",
+ "candle-core",
+ "candle-metal-kernels",
  "half",
  "metal 0.27.0",
  "num-traits",
@@ -771,25 +717,6 @@ dependencies = [
  "safetensors",
  "serde",
  "thiserror 1.0.69",
-]
-
-[[package]]
-name = "candle-transformers"
-version = "0.8.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "94a0900d49f8605e0e7e6693a1f560e6271279de98e5fa369e7abf3aac245020"
-dependencies = [
- "byteorder",
- "candle-core 0.8.4",
- "candle-nn 0.8.4",
- "fancy-regex",
- "num-traits",
- "rand 0.9.0",
- "rayon",
- "serde",
- "serde_json",
- "serde_plain",
- "tracing",
 ]
 
 [[package]]
@@ -799,8 +726,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e065351e72a9b81c285e78e8dab10af0c946d8a49e53e512a0b8c9b3f33d9c1d"
 dependencies = [
  "byteorder",
- "candle-core 0.9.0-alpha.1",
- "candle-nn 0.9.0-alpha.1",
+ "candle-core",
+ "candle-nn",
  "fancy-regex",
  "num-traits",
  "rand 0.9.0",
@@ -1726,11 +1653,11 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "bio",
- "candle-core 0.8.4",
+ "candle-core",
  "candle-examples",
- "candle-metal-kernels 0.8.4",
- "candle-nn 0.8.4",
- "candle-transformers 0.8.4",
+ "candle-metal-kernels",
+ "candle-nn",
+ "candle-transformers",
  "ferritin-core",
  "ferritin-onnx-models",
  "ferritin-plms",
@@ -1750,10 +1677,10 @@ dependencies = [
 [[package]]
 name = "ferritin-core"
 version = "0.3.0-dev"
-source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.3.0#2a30444115d5acc09bb572eaa5628ff0e3967d0e"
+source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.3.2#d1504a7ff75ab6b4bf25809b3a0c11ac9938e8e8"
 dependencies = [
  "anyhow",
- "candle-core 0.9.0-alpha.1",
+ "candle-core",
  "itertools 0.14.0",
  "strum 0.27.1",
 ]
@@ -1761,11 +1688,11 @@ dependencies = [
 [[package]]
 name = "ferritin-onnx-models"
 version = "0.3.0-dev"
-source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.3.0#2a30444115d5acc09bb572eaa5628ff0e3967d0e"
+source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.3.2#d1504a7ff75ab6b4bf25809b3a0c11ac9938e8e8"
 dependencies = [
  "anyhow",
- "candle-core 0.9.0-alpha.1",
- "candle-nn 0.9.0-alpha.1",
+ "candle-core",
+ "candle-nn",
  "ferritin-core",
  "ferritin-plms",
  "hf-hub",
@@ -1777,13 +1704,13 @@ dependencies = [
 [[package]]
 name = "ferritin-plms"
 version = "0.3.0-dev"
-source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.3.0#2a30444115d5acc09bb572eaa5628ff0e3967d0e"
+source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.3.2#d1504a7ff75ab6b4bf25809b3a0c11ac9938e8e8"
 dependencies = [
  "anyhow",
- "candle-core 0.9.0-alpha.1",
- "candle-metal-kernels 0.9.0-alpha.1",
- "candle-nn 0.9.0-alpha.1",
- "candle-transformers 0.9.0-alpha.1",
+ "candle-core",
+ "candle-metal-kernels",
+ "candle-nn",
+ "candle-transformers",
  "clap",
  "ferritin-core",
  "ferritin-test-data",
@@ -1799,7 +1726,7 @@ dependencies = [
 [[package]]
 name = "ferritin-test-data"
 version = "0.3.0-dev"
-source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.3.0#2a30444115d5acc09bb572eaa5628ff0e3967d0e"
+source = "git+https://github.com/ferritin-bio/ferritin.git?tag=v0.3.2#d1504a7ff75ab6b4bf25809b3a0c11ac9938e8e8"
 dependencies = [
  "tempfile",
 ]
@@ -6684,27 +6611,6 @@ dependencies = [
 
 [[package]]
 name = "ug"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "03719c61a91b51541f076dfdba45caacf750b230cefaa4b32d6f5411c3f7f437"
-dependencies = [
- "gemm 0.18.2",
- "half",
- "libloading 0.8.6",
- "memmap2",
- "num",
- "num-traits",
- "num_cpus",
- "rayon",
- "safetensors",
- "serde",
- "thiserror 1.0.69",
- "tracing",
- "yoke",
-]
-
-[[package]]
-name = "ug"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8b4e6c66f5eda774e2dcb5e35779b4a7c7ab8557c7de46398716b824464cacb"
@@ -6726,20 +6632,6 @@ dependencies = [
 
 [[package]]
 name = "ug-metal"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a02ddc17bf32f7dcaaf016b6735f7198082b82f122df7b3ca15d8ead5911ccef"
-dependencies = [
- "half",
- "metal 0.29.0",
- "objc",
- "serde",
- "thiserror 1.0.69",
- "ug 0.1.0",
-]
-
-[[package]]
-name = "ug-metal"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b37192988631e1f5083890dbdceb11e142fde2752375b6187d18a853326d773a"
@@ -6749,7 +6641,7 @@ dependencies = [
  "objc",
  "serde",
  "thiserror 1.0.69",
- "ug 0.2.0",
+ "ug",
 ]
 
 [[package]]

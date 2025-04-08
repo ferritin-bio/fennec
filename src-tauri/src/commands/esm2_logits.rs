@@ -1,12 +1,10 @@
 //! ESM2 Contact Map
 //!
 use anyhow::Result;
-use ferritin_core::AtomCollection;
+use ferritin_core::load_structure_from_string;
 use ferritin_onnx_models::{ESM2, ESM2Models};
 use ferritin_plms::ligandmpnn::utilities::aa3to1;
 use ferritin_plms::types::PseudoProbability;
-use pdbtbx::{Format, ReadOptions};
-use std::io::BufReader;
 
 #[tauri::command]
 pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<PseudoProbability>, String> {
@@ -30,15 +28,10 @@ pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<PseudoProbability>, String> 
 }
 
 fn pdb_to_sequence(prot_seq: &str) -> Result<String> {
-    let reader = BufReader::new(prot_seq.as_bytes());
-    let (pdb, _error) = ReadOptions::default()
-        .set_format(Format::Mmcif)
-        .read_raw(reader)
-        .expect("Failed to parse PDB/CIF");
-    let ac = AtomCollection::from(&pdb);
+    let ac = load_structure_from_string(prot_seq, "cif")?;
     let sequence = ac
         .iter_residues_aminoacid()
-        .map(|res| res.res_name)
+        .map(|res| res.residue_name().to_string())
         .map(|res3| aa3to1(&res3))
         .collect::<String>();
 
