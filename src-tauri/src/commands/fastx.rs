@@ -1,10 +1,9 @@
 // use std::io::prelude::*;
 use fasta::record::Definition as FastaDefinition;
 use noodles_fasta as fasta;
-use noodles_fastq as fastq;
 use serde::{Deserialize, Serialize};
 use std::fs::File;
-use std::io::{self, BufReader, BufWriter};
+use std::io::{self};
 use std::str;
 
 //  Get Stats -------------------------------------------------------------------------------------------------------------------
@@ -20,10 +19,7 @@ pub fn get_stats(filename: String) -> Result<FastaData, String> {
     let mut count = 0;
     let mut maxlength = 0;
 
-    let mut reader = File::open(&filename)
-        .map(BufReader::new)
-        .map(fasta::Reader::new)
-        .unwrap();
+    let mut reader = fasta::io::reader::Builder.build_from_path(filename).unwrap();
 
     for result in reader.records() {
         count = count + 1;
@@ -85,10 +81,7 @@ pub fn get_seqstats(filename: String) -> SeqKitFastaData {
     // let mut lengths = vec![] ;
     let mut lengths: Vec<i32> = Vec::new();
 
-    let mut reader = File::open(&filename)
-        .map(BufReader::new)
-        .map(fasta::Reader::new)
-        .unwrap();
+    let mut reader = fasta::io::reader::Builder.build_from_path(filename.clone()).unwrap();
 
     for result in reader.records() {
         count = count + 1;
@@ -124,24 +117,25 @@ pub fn get_seqstats(filename: String) -> SeqKitFastaData {
 //  Convert Fastq to Fasta -------------------------------------------------------------------------------------------------------------------
 
 pub fn convert_fastq_to_fasta(input_path: &str, output_path: &str) -> io::Result<()> {
-    let mut reader = File::open(input_path)
-        .map(BufReader::new)
-        .map(fastq::Reader::new)?;
+
+    let mut reader = fasta::io::reader::Builder.build_from_path(input_path).unwrap();
 
     // note we are creating the file here instead of opening it
-    let mut fasta_writer = File::create(output_path)
-        .map(BufWriter::new)
-        .map(fasta::Writer::new)?;
+    let mut fasta_writer = fasta::io::Writer::new(File::create(output_path)?);
 
     for result in reader.records() {
+
         // this is all to convert from Fastq to fasta. Bit of a pain but ....
         let record = result?;
         let recname = String::from_utf8(record.name().to_vec()).unwrap();
-        let recdescription = String::from_utf8(record.description().to_vec()).unwrap();
-        let fasta_definition = FastaDefinition::new(recname, Some(recdescription.into()));
+        let recdescription = record.description().unwrap();
+        let fasta_definition = FastaDefinition::new(
+            recname,
+            Some(recdescription.into())
+        );
         let fasta_record = fasta::Record::new(
             fasta_definition,
-            fasta::record::Sequence::from(record.sequence().to_vec()),
+            record.sequence().clone(),
         );
 
         fasta_writer.write_record(&fasta_record)?;

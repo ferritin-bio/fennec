@@ -3,16 +3,16 @@
 use anyhow::Result;
 use ferritin_core::load_structure_from_string;
 use ferritin_onnx_models::{ESM2, ESM2Models};
-use ferritin_plms::ligandmpnn::utilities::aa3to1;
+use ferritin_plms::featurize::utilities::aa3to1;
 use ferritin_plms::types::PseudoProbability;
 
 #[tauri::command]
 pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<PseudoProbability>, String> {
     let prot_seq = pdb_to_sequence(pdb_seq).map_err(|e| e.to_string())?;
-    let esm_model = ESM2Models::ESM2_T6_8M;
-    // let esm_model = ESM2Models::ESM2_T12_35M;
-    // let esm_model = ESM2Models::ESM2_T30_150M;
-    // let esm_model = ESM2Models::ESM2_T33_650M;
+    let esm_model = ESM2Models::T6_8M;
+    // let esm_model = ESM2Models::T12_35M;
+    // let esm_model = ESM2Models::T30_150M;
+    // let esm_model = ESM2Models::T33_650M;
 
     let esm2 = ESM2::new(esm_model).map_err(|e| e.to_string())?;
     let logits = esm2.run_model(&prot_seq).map_err(|e| e.to_string())?;
