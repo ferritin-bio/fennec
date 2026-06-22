@@ -19,24 +19,22 @@
         error = null;
 
         try {
-            logits = await invoke("get_ligmpnn_logits", {
+            const result = await invoke("get_ligmpnn_logits", {
                 pdbText,
                 position,
                 temp: temperature,
             });
+            logits = result;
         } catch (e) {
-            error = e.message;
-            console.error("Error fetching logits:", e);
+            error = typeof e === "string" ? e : (e?.message ?? String(e));
         } finally {
             loading = false;
         }
     }
 
-    function myplot(node) {
-        let plot;
-
-        function createPlot() {
-            plot = Plot.plot({
+    function myplot(node, data) {
+        function createPlot(data) {
+            const plot = Plot.plot({
                 width: node.clientWidth,
                 height: node.clientHeight,
                 margin: 20,
@@ -47,7 +45,7 @@
                     overflow: "visible",
                 },
                 marks: [
-                    Plot.barY(logits || [], {
+                    Plot.barY(data || [], {
                         x: "amino_acid",
                         y: "pseudo_prob",
                         fill: "orange",
@@ -69,8 +67,11 @@
             node.appendChild(plot);
         }
 
-        createPlot();
+        createPlot(data);
         return {
+            update(newData) {
+                createPlot(newData);
+            },
             destroy() {
                 node.innerHTML = "";
             },
@@ -86,7 +87,7 @@
     <div class="no-data">Select a residue to view LigMPNN predictions</div>
 {:else}
     <div
-        use:myplot
+        use:myplot={logits}
         style="width: 100%; height: 100%; min-height: 400px;"
         class="plot-container"
     ></div>
