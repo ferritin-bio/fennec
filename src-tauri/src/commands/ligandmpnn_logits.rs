@@ -1,24 +1,33 @@
-//! LigandMPNN_Logits
-//!
-use anyhow::Result;
+//! LigandMPNN Logits
 use ferritin_core::load_structure_from_string;
-use ferritin_onnx_models;
-use ferritin_onnx_models::LigandMPNN;
 use ferritin_plms::types::PseudoProbability;
-use tauri;
-use tauri::Error as TauriError;
+use ferritin_plms::{ProteinMPNNModels, ProteinMPNNRunner, StructureFeatures, device};
 
 #[tauri::command]
 pub fn get_ligmpnn_logits(
     pdb_text: &str,
     position: i64,
     temp: f32,
-) -> Result<Vec<PseudoProbability>, TauriError> {
-    let ac = match load_structure_from_string(pdb_text, "cif") {
-        Ok(ac) => ac,
-        Err(e) => return Err(tauri::Error::Anyhow(e)),
+) -> Result<Vec<PseudoProbability>, String> {
+    let _ = temp; // temp unused by simple_decode; retained for API compatibility
+    let dev = device(false).map_err(|e| e.to_string())?;
+
+    let ac = load_structure_from_string(pdb_text, "cif").map_err(|e| e.to_string())?;
+    let features = ac.featurize_lmpnn(&dev).map_err(|e| format!("{:?}", e))?;
+
+    let runner = ProteinMPNNRunner::load_model(ProteinMPNNModels::V48_020, dev)
+        .map_err(|e| e.to_string())?;
+    let all_probs = runner
+        .get_pseudo_probabilities(&features)
+        .map_err(|e| e.to_string())?;
+
+    let result = if position >= 0 {
+        all_probs
+            .into_iter()
+            .filter(|p| p.position == position as usize)
+            .collect()
+    } else {
+        all_probs
     };
-    let model = LigandMPNN::new()?;
-    let outputs = model.get_single_location(ac, temp, position)?;
-    Ok(outputs)
+    Ok(result)
 }
