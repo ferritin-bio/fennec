@@ -1,6 +1,6 @@
 //! Amplify CLI
 use anyhow::Result;
-use candle_examples::device;
+use ferritin_plms::device;
 use ferritin_core::load_structure_from_string;
 use ferritin_plms::featurize::utilities::aa3to1;
 use ferritin_plms::types::{ContactMap, PseudoProbability};
