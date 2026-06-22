@@ -11,7 +11,8 @@ pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<PseudoProbability>, String> 
     let dev = device(false).map_err(|e| e.to_string())?;
     let runner = ESM2Runner::load_model(ESM2Models::T6_8M, dev)
         .map_err(|e| e.to_string())?;
-    runner.get_pseudo_probabilities(&prot_seq).map_err(|e| e.to_string())
+    let result = runner.get_pseudo_probabilities(&prot_seq).map_err(|e| e.to_string())?;
+    Ok(result)
 }
 
 fn pdb_to_sequence(prot_seq: &str) -> Result<String> {

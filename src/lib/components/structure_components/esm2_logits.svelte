@@ -19,22 +19,20 @@
         error = null;
 
         try {
-            logits = await invoke("get_esm2_logits", {
+            const result = await invoke("get_esm2_logits", {
                 pdbSeq: pdbText,
             });
-            console.log(logits);
+            logits = result;
         } catch (e) {
-            error = e.message;
-            console.error("Error fetching logits:", e);
+            error = typeof e === "string" ? e : (e?.message ?? String(e));
         } finally {
             loading = false;
         }
     }
 
-    function myplot(node) {
-        let plot;
-        function createPlot() {
-            plot = Plot.plot({
+    function myplot(node, data) {
+        function createPlot(data) {
+            const plot = Plot.plot({
                 width: node.clientWidth,
                 height: node.clientHeight,
                 margin: 20,
@@ -52,13 +50,13 @@
                 x: {
                     tickFormat: "",
                     labelOffset: 30,
-                    ticks: (logits || []).reduce((acc, curr) => {
+                    ticks: (data || []).reduce((acc, curr) => {
                         const pos = curr.position;
                         return pos % 10 === 0 ? [...acc, pos] : acc;
                     }, []),
                 },
                 marks: [
-                    Plot.cell(logits || [], {
+                    Plot.cell(data || [], {
                         x: "position",
                         y: "amino_acid",
                         fill: "pseudo_prob",
@@ -70,8 +68,11 @@
             node.appendChild(plot);
         }
 
-        createPlot();
+        createPlot(data);
         return {
+            update(newData) {
+                createPlot(newData);
+            },
             destroy() {
                 node.innerHTML = "";
             },
@@ -87,7 +88,7 @@
     <div class="no-data">Select a residue to view LigMPNN predictions</div>
 {:else}
     <div
-        use:myplot
+        use:myplot={logits}
         style="width: 100%; height: 100%; min-height: 400px;"
         class="plot-container"
     ></div>
