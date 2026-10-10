@@ -1,5 +1,5 @@
 <script>
-  import IGVBrowser from "$lib/components/genomics/IGVBrowser.svelte";
+  import IGVBrowser from "#lib/components/genomics/IGVBrowser.svelte";
 </script>
 
 <div class="container mx-auto p-4">

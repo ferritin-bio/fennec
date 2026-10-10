@@ -21,3 +21,22 @@ export interface ContactMap {
   layer: number;
   contact_estimate: number;
 }
+
+/** Mirrors `FastaData` in src-tauri/src/commands/fastx.rs (`get_stats`). */
+export interface FastaData {
+  recordcount: number;
+  maxlength: number;
+}
+
+/** Mirrors `SeqKitFastaData` in src-tauri/src/commands/fastx.rs (`get_seqstats`). */
+export interface SeqKitFastaData {
+  filename: string;
+  format: string;
+  datatype: string;
+  num_seqs: number;
+  sum_len: number;
+  min_len: number;
+  avg_len: number;
+  contig_lengths: number[];
+  max_len: number;
+}

@@ -1,5 +1,5 @@
 <script>
-  import Ideogram from "$lib/components/genomics/Ideogram.svelte";
+  import Ideogram from "#lib/components/genomics/Ideogram.svelte";
 </script>
 
 <div class="container mx-auto p-4">

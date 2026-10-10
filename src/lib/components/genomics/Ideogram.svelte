@@ -2,12 +2,12 @@
     import { onMount, onDestroy } from "svelte";
     import Ideogram from "ideogram";
 
-    let container;
+    let container: HTMLElement | undefined;
     let organism = "4932"; // Default: S. cerevisiae
-    let ideogramInstance = null;
+    let ideogramInstance: { destroy?: () => void } | null = null;
     let isRendering = false;
     let isLoading = true;
-    let errorMessage = null;
+    let errorMessage: string | null = null;
 
     // List of common model organisms
     const organisms = [
@@ -58,9 +58,9 @@
                     isLoading = false;
                 },
                 // Handle drawing errors
-                onError: function (error) {
+                onError: function (error: unknown) {
                     console.error("Ideogram error:", error);
-                    errorMessage = "Failed to load chromosome data: " + error;
+                    errorMessage = "Failed to load chromosome data: " + String(error);
                     isLoading = false;
                 },
             });
@@ -68,7 +68,7 @@
             console.error("Error initializing ideogram:", error);
             errorMessage =
                 "Failed to initialize chromosome visualization: " +
-                error.message;
+                (error instanceof Error ? error.message : String(error));
             isLoading = false;
         }
     }

@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   
-  let container;
+  let container: HTMLDivElement | undefined;
   let genome = "hg38";
   let locus = "chr8:127,736,588-127,739,371";
   let height = 400;
@@ -41,7 +41,9 @@
     
     try {
       // Dynamically import IGV
-      const igvModule = await import('https://cdn.jsdelivr.net/npm/igv@2.15.5/dist/igv.esm.min.js');
+      // The URL is kept in a variable so TypeScript doesn't try to resolve it at build time
+      const igvUrl = 'https://cdn.jsdelivr.net/npm/igv@2.15.5/dist/igv.esm.min.js';
+      const igvModule = await import(/* @vite-ignore */ igvUrl);
       const igv = igvModule.default;
       
       // Clear the container first

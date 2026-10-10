@@ -10,9 +10,9 @@
     import { ChevronDown } from "@lucide/svelte";
     import Button from "./ui/button/button.svelte";
     import * as Sidebar from "./ui/sidebar/index.js";
-    import * as Card from "$lib/components/ui/card/index.js";
-    import * as Avatar from "$lib/components/ui/avatar/index.js";
-    import * as Collapsible from "$lib/components/ui/collapsible/index.js";
+    import * as Card from "#lib/components/ui/card/index.js";
+    import * as Avatar from "#lib/components/ui/avatar/index.js";
+    import * as Collapsible from "#lib/components/ui/collapsible/index.js";
 
     // Track which groups are open
     let isDeepLearningOpen = true;

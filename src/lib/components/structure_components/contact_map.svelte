@@ -2,11 +2,12 @@
     import * as Plot from "@observablehq/plot";
     import { invoke } from "@tauri-apps/api/core";
     import type { ContactMap } from "../../types";
+    import { errorMessage } from "../../utils";
 
     // State + stateful ----------------------------
     const { pdbText = "" } = $props();
     let loading = $state(false);
-    let error = $state(null);
+    let error = $state<string | null>(null);
     let logits = $state<ContactMap[]>([]);
 
     $effect(() => {
@@ -19,22 +20,21 @@
         error = null;
 
         try {
-            logits = await invoke("get_amplify_contact_map", {
+            logits = await invoke<ContactMap[]>("get_amplify_contact_map", {
                 pdbText: pdbText,
             });
             console.log(logits);
         } catch (e) {
-            error = e.message;
+            error = errorMessage(e);
             console.error("Error fetching logits:", e);
         } finally {
             loading = false;
         }
     }
 
-    function myplot(node) {
-        let plot;
+    function myplot(node: HTMLElement) {
         function createPlot() {
-            plot = Plot.plot({
+            const plot = Plot.plot({
                 width: node.clientWidth,
                 height: node.clientHeight,
                 margin: 20,
@@ -52,8 +52,8 @@
                 x: {
                     tickFormat: "",
                     labelOffset: 30,
-                    ticks: (logits || []).reduce((acc, curr) => {
-                        const pos = curr.position;
+                    ticks: (logits || []).reduce<number[]>((acc, curr) => {
+                        const pos = curr.position_1;
                         return pos % 10 === 0 ? [...acc, pos] : acc;
                     }, []),
                 },

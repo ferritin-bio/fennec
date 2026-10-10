@@ -2,11 +2,16 @@
     import * as Plot from "@observablehq/plot";
     import { invoke } from "@tauri-apps/api/core";
     import type { PseudoProbability } from "../../types";
+    import { errorMessage } from "../../utils";
 
-    const { pdbText = "", position = 0, temperature = 0.1 } = $props();
+    const {
+        pdbText = "",
+        position = 0,
+        temperature = 0.1,
+    }: { pdbText?: string; position?: number; temperature?: number } = $props();
 
     let loading = $state(false);
-    let error = $state(null);
+    let error = $state<string | null>(null);
     let logits = $state<PseudoProbability[]>([]);
 
     $effect(() => {
@@ -19,21 +24,21 @@
         error = null;
 
         try {
-            const result = await invoke("get_ligmpnn_logits", {
+            const result = await invoke<PseudoProbability[]>("get_ligmpnn_logits", {
                 pdbText,
                 position,
                 temp: temperature,
             });
             logits = result;
         } catch (e) {
-            error = typeof e === "string" ? e : (e?.message ?? String(e));
+            error = errorMessage(e);
         } finally {
             loading = false;
         }
     }
 
-    function myplot(node, data) {
-        function createPlot(data) {
+    function myplot(node: HTMLElement, data: PseudoProbability[]) {
+        function createPlot(data: PseudoProbability[]) {
             const plot = Plot.plot({
                 width: node.clientWidth,
                 height: node.clientHeight,
@@ -69,7 +74,7 @@
 
         createPlot(data);
         return {
-            update(newData) {
+            update(newData: PseudoProbability[]) {
                 createPlot(newData);
             },
             destroy() {

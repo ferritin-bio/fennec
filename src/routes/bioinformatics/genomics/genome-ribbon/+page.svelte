@@ -1,5 +1,5 @@
 <script>
-  import GenomeRibbon from "$lib/components/genomics/GenomeRibbon.svelte";
+  import GenomeRibbon from "#lib/components/genomics/GenomeRibbon.svelte";
 </script>
 
 <div class="container mx-auto p-4">

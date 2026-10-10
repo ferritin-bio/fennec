@@ -3,9 +3,7 @@ import { sveltekit } from "@sveltejs/kit/vite";
 import tailwindcss from "@tailwindcss/vite";
 import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
 import adapter from "@sveltejs/adapter-static";
-import * as path from "path";
 
-// @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
@@ -18,11 +16,6 @@ export default defineConfig(async () => ({
     sveltekit({
       adapter: adapter(),
       preprocess: vitePreprocess(),
-      alias: {
-        // SvelteKit 3 removed `$lib`; keep it pointing at src/lib
-        $lib: path.resolve("./src/lib"),
-        "@/*": "./src/*",
-      },
     }),
   ],
 
@@ -30,11 +23,6 @@ export default defineConfig(async () => ({
   //
   // 1. prevent vite from obscuring rust errors
   clearScreen: false,
-  resolve: {
-    alias: {
-      $lib: path.resolve("./src/lib"),
-    },
-  },
   // 2. tauri expects a fixed port, fail if that port is not available
   server: {
     port: 1420,
