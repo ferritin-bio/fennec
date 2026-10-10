@@ -1,13 +1,13 @@
 <!-- Sidebar and Navigation Controls here -->
 <script lang="ts">
-    import { page } from "$app/stores";
-    import Microscope from "lucide-svelte/icons/microscope";
-    import Molecule from "lucide-svelte/icons/component"; // Using component icon as a stand-in for molecule
-    import SettingsIcon from "lucide-svelte/icons/settings"; // Changed to SettingsIcon
-    import HelpIcon from "lucide-svelte/icons/help-circle"; // Changed to HelpIcon
-    import FileText from "lucide-svelte/icons/file-text"; // For FASTA files
-    import Dna from "lucide-svelte/icons/dna"; // For bioinformatics tools
-    import { ChevronDown } from "lucide-svelte";
+    import { page } from "$app/state";
+    import Microscope from "@lucide/svelte/icons/microscope";
+    import Molecule from "@lucide/svelte/icons/component"; // Using component icon as a stand-in for molecule
+    import SettingsIcon from "@lucide/svelte/icons/settings"; // Changed to SettingsIcon
+    import HelpIcon from "@lucide/svelte/icons/help-circle"; // Changed to HelpIcon
+    import FileText from "@lucide/svelte/icons/file-text"; // For FASTA files
+    import Dna from "@lucide/svelte/icons/dna"; // For bioinformatics tools
+    import { ChevronDown } from "@lucide/svelte";
     import Button from "./ui/button/button.svelte";
     import * as Sidebar from "./ui/sidebar/index.js";
     import * as Card from "$lib/components/ui/card/index.js";
@@ -134,7 +134,7 @@
                                         <a
                                             href={item.url}
                                             {...props}
-                                            class:active={$page.url.pathname ===
+                                            class:active={page.url.pathname ===
                                                 item.url}
                                         >
                                             <item.icon />
@@ -172,7 +172,7 @@
                                         <a
                                             href={item.url}
                                             {...props}
-                                            class:active={$page.url.pathname ===
+                                            class:active={page.url.pathname ===
                                                 item.url}
                                         >
                                             <item.icon />
@@ -210,7 +210,7 @@
                                         <a
                                             href={item.url}
                                             {...props}
-                                            class:active={$page.url.pathname ===
+                                            class:active={page.url.pathname ===
                                                 item.url}
                                         >
                                             <item.icon />

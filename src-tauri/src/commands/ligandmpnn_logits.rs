@@ -16,7 +16,7 @@ pub fn get_ligmpnn_logits(
 
     let features = ac.featurize_lmpnn(&dev).map_err(|e| format!("{:?}", e))?;
 
-    let runner = ProteinMPNNRunner::load_model(ProteinMPNNModels::V48_020, dev)
+    let runner = ProteinMPNNRunner::from_pretrained(ProteinMPNNModels::V48_020, dev)
         .map_err(|e| e.to_string())?;
 
     let all_probs = runner

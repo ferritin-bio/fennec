@@ -23,7 +23,7 @@ pub fn get_amplify_logits(pdb_text: &str) -> Result<Vec<PseudoProbability>, Stri
         "350M" => AmplifyModels::AMP350M,
         &_ => panic!("Only 2 options"),
     };
-    let amprunner = AmplifyRunner::load_model(amp_model, device).map_err(|e| e.to_string())?;
+    let amprunner = AmplifyRunner::from_pretrained(amp_model, device).map_err(|e| e.to_string())?;
     let pseudo_probabilities = amprunner
         .get_pseudo_probabilities(&sequence)
         .map_err(|e| e.to_string())?;
@@ -46,7 +46,7 @@ pub fn get_amplify_contact_map(pdb_text: &str) -> Result<Vec<ContactMap>, String
         "350M" => AmplifyModels::AMP350M,
         &_ => panic!("Only 2 options"),
     };
-    let amprunner = AmplifyRunner::load_model(amp_model, device).map_err(|e| e.to_string())?;
+    let amprunner = AmplifyRunner::from_pretrained(amp_model, device).map_err(|e| e.to_string())?;
     let contact_map = amprunner
         .get_contact_map(&sequence)
         .map_err(|e| e.to_string())?;

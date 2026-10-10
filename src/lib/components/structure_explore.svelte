@@ -115,7 +115,7 @@
                 <div class="slider-container flex items-center gap-4">
                     <span class="font-medium min-w-20 mr-8">Temperature:</span>
                     <Slider
-                        class="flex-grow"
+                        class="grow"
                         type="single"
                         bind:value={temperature}
                         max={1}
@@ -140,6 +140,7 @@
 </div>
 
 <style>
+  @reference "../../app.css";
     #miew {
         left: 10px;
         top: 10px;

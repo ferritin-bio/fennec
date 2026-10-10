@@ -87,6 +87,7 @@
 </div>
 
 <style>
+  @reference "../../app.css";
     .info-item {
         @apply flex items-center;
     }
