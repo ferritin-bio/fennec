@@ -90,7 +90,11 @@ pub fn get_seqstats(filename: String) -> Result<SeqKitFastaData, String> {
     let total: i32 = lengths.iter().sum();
     let min_value = *lengths.iter().min().unwrap_or(&0);
     let max_value = *lengths.iter().max().unwrap_or(&0);
-    let avg = if count > 0 { total as f32 / count as f32 } else { 0.0 };
+    let avg = if count > 0 {
+        total as f32 / count as f32
+    } else {
+        0.0
+    };
 
     Ok(SeqKitFastaData {
         filename,
@@ -108,7 +112,9 @@ pub fn get_seqstats(filename: String) -> Result<SeqKitFastaData, String> {
 //  Convert Fastq to Fasta -------------------------------------------------------------------------------------------------------------------
 
 pub fn convert_fastq_to_fasta(input_path: &str, output_path: &str) -> io::Result<()> {
-    let mut reader = File::open(input_path).map(BufReader::new).map(fastq::io::Reader::new)?;
+    let mut reader = File::open(input_path)
+        .map(BufReader::new)
+        .map(fastq::io::Reader::new)?;
     let mut fasta_writer = fasta::io::Writer::new(BufWriter::new(File::create(output_path)?));
 
     for result in reader.records() {

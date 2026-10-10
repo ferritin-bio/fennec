@@ -1,7 +1,7 @@
 //! Amplify CLI
 use anyhow::Result;
-use ferritin_plms::device;
 use ferritin_core::load_structure_from_string;
+use ferritin_plms::device;
 use ferritin_plms::featurize::utilities::aa3to1;
 use ferritin_plms::types::{ContactMap, PseudoProbability};
 use ferritin_plms::{AmplifyModels, AmplifyRunner};
@@ -51,4 +51,32 @@ pub fn get_amplify_contact_map(pdb_text: &str) -> Result<Vec<ContactMap>, String
         .get_contact_map(&sequence)
         .map_err(|e| e.to_string())?;
     Ok(contact_map)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    const CIF: &str = include_str!("../../testdata/structures/101m.cif");
+    const PDB: &str = include_str!("../../testdata/structures/1BC8.pdb");
+
+    #[test]
+    #[ignore = "loads cached HuggingFace weights; run with `cargo test --lib -- --ignored`"]
+    fn test_amplify_logits_from_cif() {
+        let logits = get_amplify_logits(CIF).expect("AMPLIFY logits");
+        assert!(!logits.is_empty());
+        assert!(
+            logits
+                .iter()
+                .all(|p| p.pseudo_prob.is_finite() && (0.0..=1.0).contains(&p.pseudo_prob))
+        );
+    }
+
+    #[test]
+    #[ignore = "loads cached HuggingFace weights; run with `cargo test --lib -- --ignored`"]
+    fn test_amplify_contact_map_from_pdb() {
+        let contacts = get_amplify_contact_map(PDB).expect("AMPLIFY contact map");
+        assert!(!contacts.is_empty());
+        assert!(contacts.iter().all(|c| c.contact_estimate.is_finite()));
+    }
 }

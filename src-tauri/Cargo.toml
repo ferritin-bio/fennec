@@ -21,8 +21,8 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 anyhow = "1.0"
 bio = "4.2.1"
-ferritin-core = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-core" }
-ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-plms" }
+ferritin-core = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "887f6ebc209b49935eea0d585ca08591c485ecaf", package = "ferritin-core" }
+ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "887f6ebc209b49935eea0d585ca08591c485ecaf", package = "ferritin-plms" }
 noodles-fasta = "0.67.0"
 noodles-fastq = "0.24.0"
 protein-translate = "0.2.0"
@@ -35,7 +35,7 @@ tempfile = "3.27.0"
 
 
 [target.'cfg(target_os = "macos")'.dependencies]
-ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-plms", features = ["metal"] }
+ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "887f6ebc209b49935eea0d585ca08591c485ecaf", package = "ferritin-plms", features = ["metal"] }
 
 [features]
 metal = ["ferritin-plms/metal"]

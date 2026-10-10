@@ -1935,7 +1935,7 @@ dependencies = [
 [[package]]
 name = "ferritin-core"
 version = "0.4.0-dev"
-source = "git+https://github.com/ferritin-bio/ferritin.git#887f6ebc209b49935eea0d585ca08591c485ecaf"
+source = "git+https://github.com/ferritin-bio/ferritin.git?rev=887f6ebc209b49935eea0d585ca08591c485ecaf#887f6ebc209b49935eea0d585ca08591c485ecaf"
 dependencies = [
  "anyhow",
  "compact_str 0.10.0",
@@ -1946,7 +1946,7 @@ dependencies = [
 [[package]]
 name = "ferritin-plms"
 version = "0.4.0-dev"
-source = "git+https://github.com/ferritin-bio/ferritin.git#887f6ebc209b49935eea0d585ca08591c485ecaf"
+source = "git+https://github.com/ferritin-bio/ferritin.git?rev=887f6ebc209b49935eea0d585ca08591c485ecaf#887f6ebc209b49935eea0d585ca08591c485ecaf"
 dependencies = [
  "anyhow",
  "candle-core",

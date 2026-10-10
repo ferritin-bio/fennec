@@ -1,4 +1,3 @@
-use rnapkin;
 use rnapkin::draw::{self, Mirror, colors::ColorTheme};
 use rnapkin::forest;
 use rnapkin::rnamanip::{self, Nucleotide};
@@ -14,7 +13,7 @@ pub fn rnapkin_fn(
     rotation_angle: f64,
     bubble_radius: f64,
 ) -> String {
-    let color_theme_rs = match color_theme.as_ref() {
+    let color_theme_rs = match color_theme {
         "dark" => ColorTheme::dark(),
         "white" => ColorTheme::white(),
         "black" => ColorTheme::black(),
@@ -28,7 +27,7 @@ pub fn rnapkin_fn(
     // https://github.com/ukmrs/rnapkin/blob/main/src/main.rs#L61
     // pi
     // let height = 900;
-    // let BUBBLE_RADIUS: f64 = 0.5;
+    // let bubble_radius: f64 = 0.5;
     // let mut theme = ColorTheme::dark();
     // Todo: handle malformed parser inputs here
     let pi = rnapkin::utils::ParsedInput::parse(&mut lines).unwrap();
@@ -89,7 +88,7 @@ mod tests {
 
     #[test]
     fn test_rnapkin() {
-        let BUBBLE_RADIUS: f64 = 0.5;
+        let bubble_radius: f64 = 0.5;
 
         let tree1 = ">fantastic guanine riboswitch
         AAUAUAAUAGGAACACUCAUAUAAUCGCGUGGAUAUGGCACGCAAGUUUCUACCGGGCAC
@@ -133,7 +132,7 @@ mod tests {
         };
 
         let tree = forest::grow_tree(&pairlist);
-        let bubbles = draw::gather_bubbles(&tree, &sequence, BUBBLE_RADIUS, 0.0_f64.to_radians());
+        let bubbles = draw::gather_bubbles(&tree, &sequence, bubble_radius, 0.0_f64.to_radians());
         let mirror = Mirror::new(false, false);
 
         let highlights = match pi.highlight {
@@ -143,7 +142,7 @@ mod tests {
 
         let svgout = draw::plot(
             &bubbles,
-            BUBBLE_RADIUS,
+            bubble_radius,
             &filename,
             &ColorTheme::default(),
             height,
