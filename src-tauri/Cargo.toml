@@ -1,6 +1,6 @@
 [package]
 name = "fennec"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local-First Protein App"
 authors = ["zach charlop-powers"]
 edition = "2024"
