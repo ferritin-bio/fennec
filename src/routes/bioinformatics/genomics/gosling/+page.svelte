@@ -1,5 +1,5 @@
 <script>
-  import Gosling from "$lib/components/genomics/Gosling.svelte";
+  import Gosling from "#lib/components/genomics/Gosling.svelte";
 </script>
 
 <div class="container mx-auto p-4">

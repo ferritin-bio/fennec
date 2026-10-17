@@ -1,6 +1,6 @@
 [package]
 name = "fennec"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local-First Protein App"
 authors = ["zach charlop-powers"]
 edition = "2024"
@@ -20,22 +20,22 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 anyhow = "1.0"
-bio = "4.0.0"
-ferritin-core = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-core" }
-ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-plms" }
-noodles-fasta = "0.62.0"
-noodles-fastq = "0.23.0"
+bio = "4.2.1"
+ferritin-core = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "887f6ebc209b49935eea0d585ca08591c485ecaf", package = "ferritin-core" }
+ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "887f6ebc209b49935eea0d585ca08591c485ecaf", package = "ferritin-plms" }
+noodles-fasta = "0.67.0"
+noodles-fastq = "0.24.0"
 protein-translate = "0.2.0"
 rnapkin = "0.3.9"
 serde = { version = "1", features = ["derive"] }
 tauri = { version = "2", features = [] }
-tauri-plugin-dialog = "2.7.1"
+tauri-plugin-dialog = "2.8.1"
 tauri-plugin-opener = "2"
 tempfile = "3.27.0"
 
 
 [target.'cfg(target_os = "macos")'.dependencies]
-ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", package = "ferritin-plms", features = ["metal"] }
+ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "887f6ebc209b49935eea0d585ca08591c485ecaf", package = "ferritin-plms", features = ["metal"] }
 
 [features]
 metal = ["ferritin-plms/metal"]

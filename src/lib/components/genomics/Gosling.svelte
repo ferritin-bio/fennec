@@ -1,7 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
   
-  let container;
+  let container: HTMLElement | undefined;
   let width = "100%";
   let height = 300;
   let dataUrl = "https://server.gosling-lang.org/api/v1/tileset_info/?d=cistrome-multivec";
@@ -17,10 +17,14 @@
       document.head.appendChild(link);
       
       // Load React, ReactDOM and Gosling dependencies
+      // The URL is kept in a variable so TypeScript doesn't try to resolve it at build time
+      const goslingUrl = 'https://esm.sh/gosling.js@0.11.0?deps=react@18,react-dom@18';
       const [gosling] = await Promise.all([
-        import('https://esm.sh/gosling.js@0.11.0?deps=react@18,react-dom@18')
+        import(/* @vite-ignore */ goslingUrl)
       ]);
       
+      if (!container) throw new Error('Gosling container is not mounted');
+
       // Initialize the visualization
       gosling.embed(container, {
         tracks: [

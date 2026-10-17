@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { invoke } from '@tauri-apps/api/core';
   import { onMount } from 'svelte';
   
@@ -11,8 +11,8 @@
   let colorTheme = "default";
   let svgOutput = '';
   let loading = false;
-  let error = null;
-  let svgContainer;
+  let error: string | null = null;
+  let svgContainer: HTMLDivElement | undefined;
 
   async function visualizeRNA() {
     if (!rnaInput.trim()) {
@@ -25,7 +25,7 @@
       error = null;
       
       // Call the Rust function to visualize RNA structure
-      svgOutput = await invoke("rnapkin_fn", {
+      svgOutput = await invoke<string>("rnapkin_fn", {
         sequence: rnaInput,
         height,
         color_theme: colorTheme,
@@ -41,7 +41,7 @@
       }
       
     } catch (err) {
-      error = err.toString();
+      error = String(err);
       console.error("Error visualizing RNA:", err);
     } finally {
       loading = false;

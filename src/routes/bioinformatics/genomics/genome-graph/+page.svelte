@@ -1,5 +1,5 @@
 <script>
-  import GenomeGraph from "$lib/components/genomics/GenomeGraph.svelte";
+  import GenomeGraph from "#lib/components/genomics/GenomeGraph.svelte";
 </script>
 
 <div class="container mx-auto p-4">

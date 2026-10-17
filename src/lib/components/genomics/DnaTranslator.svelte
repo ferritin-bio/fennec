@@ -1,10 +1,10 @@
-<script>
+<script lang="ts">
   import { invoke } from '@tauri-apps/api/core';
   
   let dnaInput = '';
   let proteinOutput = '';
   let loading = false;
-  let error = null;
+  let error: string | null = null;
 
   async function translateDna() {
     if (!dnaInput.trim()) {
@@ -17,10 +17,10 @@
       error = null;
       
       // Call the Rust function to translate DNA to protein
-      proteinOutput = await invoke("translate_dna", { dnainput: dnaInput });
+      proteinOutput = await invoke<string>("translate_dna", { dnainput: dnaInput });
       
     } catch (err) {
-      error = err.toString();
+      error = String(err);
       console.error("Error translating DNA:", err);
     } finally {
       loading = false;

@@ -1,5 +1,5 @@
 <script>
-  import MSAViewer from "$lib/components/genomics/MSAViewer.svelte";
+  import MSAViewer from "#lib/components/genomics/MSAViewer.svelte";
 </script>
 
 <div class="container mx-auto p-4">

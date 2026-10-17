@@ -2,11 +2,12 @@
     import * as Plot from "@observablehq/plot";
     import { invoke } from "@tauri-apps/api/core";
     import type { PseudoProbability } from "../../types";
+    import { errorMessage } from "../../utils";
 
     // State + stateful ----------------------------
-    const { pdbText = "" } = $props();
+    const { pdbText = "" }: { pdbText?: string } = $props();
     let loading = $state(false);
-    let error = $state(null);
+    let error = $state<string | null>(null);
     let logits = $state<PseudoProbability[]>([]);
 
     $effect(() => {
@@ -19,19 +20,19 @@
         error = null;
 
         try {
-            const result = await invoke("get_esm2_logits", {
+            const result = await invoke<PseudoProbability[]>("get_esm2_logits", {
                 pdbSeq: pdbText,
             });
             logits = result;
         } catch (e) {
-            error = typeof e === "string" ? e : (e?.message ?? String(e));
+            error = errorMessage(e);
         } finally {
             loading = false;
         }
     }
 
-    function myplot(node, data) {
-        function createPlot(data) {
+    function myplot(node: HTMLElement, data: PseudoProbability[]) {
+        function createPlot(data: PseudoProbability[]) {
             const plot = Plot.plot({
                 width: node.clientWidth,
                 height: node.clientHeight,
@@ -50,7 +51,7 @@
                 x: {
                     tickFormat: "",
                     labelOffset: 30,
-                    ticks: (data || []).reduce((acc, curr) => {
+                    ticks: (data || []).reduce<number[]>((acc, curr) => {
                         const pos = curr.position;
                         return pos % 10 === 0 ? [...acc, pos] : acc;
                     }, []),
@@ -70,7 +71,7 @@
 
         createPlot(data);
         return {
-            update(newData) {
+            update(newData: PseudoProbability[]) {
                 createPlot(newData);
             },
             destroy() {

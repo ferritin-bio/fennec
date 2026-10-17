@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { Input } from "$lib/components/ui/input/index.js";
-    import { Button } from "$lib/components/ui/button/index.js";
-    import ESM2Logits from "$lib/components/structure_components/esm2_logits.svelte";
-    import AmplifyLogits from "$lib/components/structure_components/amplify_logits.svelte";
+    import { Input } from "#lib/components/ui/input/index.js";
+    import { Button } from "#lib/components/ui/button/index.js";
+    import ESM2Logits from "#lib/components/structure_components/esm2_logits.svelte";
+    import AmplifyLogits from "#lib/components/structure_components/amplify_logits.svelte";
 
     // Stateful Variables
     let pdbCode = $state("");
@@ -88,9 +88,11 @@
 
 <style>
     .info-item {
-        @apply flex items-center;
+        display: flex;
+        align-items: center;
     }
     .value {
-        @apply text-red-500 ml-1;
+        color: oklch(63.7% 0.237 25.331); /* red-500 */
+        margin-left: 0.25rem;
     }
 </style>

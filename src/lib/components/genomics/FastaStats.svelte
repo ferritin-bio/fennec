@@ -1,21 +1,27 @@
-<script>
+<script lang="ts">
     import { invoke } from "@tauri-apps/api/core";
     import { open } from "@tauri-apps/plugin-dialog";
     import { onMount } from "svelte";
     import * as Plot from "@observablehq/plot";
+    import type { FastaData, SeqKitFastaData } from "../../types";
 
-    let stats = null;
+    let stats: FastaData | SeqKitFastaData | null = null;
     let loading = false;
-    let error = null;
-    let plotElement;
+    let error: string | null = null;
+    let plotElement: HTMLDivElement | undefined;
     let plotWidth = 0;
+
+    // Only the detailed stats carry contig lengths
+    function contigLengths(s: FastaData | SeqKitFastaData | null): number[] | undefined {
+        return s && "contig_lengths" in s ? s.contig_lengths : undefined;
+    }
 
     onMount(() => {
         const resizeObserver = new ResizeObserver((entries) => {
             for (const entry of entries) {
                 if (entry.target === plotElement?.parentElement) {
                     plotWidth = entry.contentRect.width;
-                    if (stats?.contig_lengths) {
+                    if (contigLengths(stats)) {
                         renderPlot();
                     }
                 }
@@ -33,12 +39,8 @@
     });
 
     function renderPlot() {
-        if (
-            !plotElement ||
-            !stats?.contig_lengths ||
-            stats.contig_lengths.length === 0
-        )
-            return;
+        const lengths = contigLengths(stats);
+        if (!plotElement || !lengths || lengths.length === 0) return;
         // // Clear previous plot
         // while (plotElement.firstChild) {
         //     plotElement.firstChild.remove();
@@ -65,7 +67,7 @@
                 fontFamily: "inherit",
             },
             marks: [
-                Plot.rectY(stats.contig_lengths, Plot.binX({ y: "count" })),
+                Plot.rectY(lengths, Plot.binX({ y: "count" })),
             ],
         });
         plotElement.appendChild(plot);
@@ -94,9 +96,9 @@
             }
 
             // Call the Rust function to analyze the FASTA file
-            stats = await invoke("get_stats", { filename: fasta });
+            stats = await invoke<FastaData>("get_stats", { filename: fasta });
         } catch (err) {
-            error = err.toString();
+            error = String(err);
             console.error("Error getting FASTA stats:", err);
         } finally {
             loading = false;
@@ -124,16 +126,16 @@
             }
 
             // Call the more detailed stats function
-            stats = await invoke("get_seqstats", { filename: fasta });
+            stats = await invoke<SeqKitFastaData>("get_seqstats", { filename: fasta });
 
             // Render the plot when stats are loaded
             setTimeout(() => {
-                if (stats?.contig_lengths) {
+                if (contigLengths(stats)) {
                     renderPlot();
                 }
             }, 10);
         } catch (err) {
-            error = err.toString();
+            error = String(err);
             console.error("Error getting detailed FASTA stats:", err);
         } finally {
             loading = false;

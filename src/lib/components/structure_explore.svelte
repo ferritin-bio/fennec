@@ -2,9 +2,9 @@
     import { onMount } from "svelte";
     import Miew from "miew";
     import * as miewcss from "miew/dist/Miew.css";
-    import { Input } from "$lib/components/ui/input/index.js";
-    import { Button } from "$lib/components/ui/button/index.js";
-    import { Slider } from "$lib/components/ui/slider/index.js";
+    import { Input } from "#lib/components/ui/input/index.js";
+    import { Button } from "#lib/components/ui/button/index.js";
+    import { Slider } from "#lib/components/ui/slider/index.js";
     import LigBarChart from "./structure_components/ligand_mpnn.svelte";
 
     // Stateful Variables
@@ -15,7 +15,7 @@
     let current = $state({
         residue_index: 0,
         residue_name: "",
-        chain: 0,
+        chain: "",
     });
     let temperature = $state(0.1);
 
@@ -29,8 +29,8 @@
             const residue = e.obj.residue;
             current = {
                 residue_index: residue._sequence,
-                residue_name: residue._type?._name,
-                chain: residue._chain?._name,
+                residue_name: residue._type?._name ?? "",
+                chain: residue._chain?._name ?? "",
             };
         });
 
@@ -40,7 +40,7 @@
     const handleSubmit = async (event: Event) => {
         event.preventDefault();
         if (!pdbCode) return;
-        current = { residue_index: 0, residue_name: "", chain: 0 };
+        current = { residue_index: 0, residue_name: "", chain: "" };
         loading = true;
         error = "";
 
@@ -115,7 +115,7 @@
                 <div class="slider-container flex items-center gap-4">
                     <span class="font-medium min-w-20 mr-8">Temperature:</span>
                     <Slider
-                        class="flex-grow"
+                        class="grow"
                         type="single"
                         bind:value={temperature}
                         max={1}
@@ -147,15 +147,21 @@
         max-height: 450px;
     }
     .slider-container {
-        @apply bg-gray-100 p-4 rounded-lg mb-4;
+        background-color: oklch(96.7% 0.003 264.542); /* gray-100 */
+        padding: 1rem;
+        border-radius: var(--radius); /* rounded-lg */
+        margin-bottom: 1rem;
     }
     .temperature-value {
-        @apply text-gray-600 font-mono;
+        color: oklch(44.6% 0.03 256.802); /* gray-600 */
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     }
     .info-item {
-        @apply flex items-center;
+        display: flex;
+        align-items: center;
     }
     .value {
-        @apply text-red-500 ml-1;
+        color: oklch(63.7% 0.237 25.331); /* red-500 */
+        margin-left: 0.25rem;
     }
 </style>

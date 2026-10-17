@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { Input } from "$lib/components/ui/input/index.js";
-    import { Button } from "$lib/components/ui/button/index.js";
-    import ContactMap from "$lib/components/structure_components/contact_map.svelte";
+    import { Input } from "#lib/components/ui/input/index.js";
+    import { Button } from "#lib/components/ui/button/index.js";
+    import ContactMap from "#lib/components/structure_components/contact_map.svelte";
 
     // Stateful Variables
     let pdbCode = $state("");
@@ -81,9 +81,11 @@
 
 <style>
     .info-item {
-        @apply flex items-center;
+        display: flex;
+        align-items: center;
     }
     .value {
-        @apply text-red-500 ml-1;
+        color: oklch(63.7% 0.237 25.331); /* red-500 */
+        margin-left: 0.25rem;
     }
 </style>
