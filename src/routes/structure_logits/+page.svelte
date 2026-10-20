@@ -1,5 +1,5 @@
 <script lang="ts">
-    import StructureApp from "#lib/components/structure_explore.svelte";
+    import Workspace from "#lib/components/workspace/Workspace.svelte";
 </script>
 
-<StructureApp />
+<Workspace />

@@ -5,23 +5,25 @@
     import { errorMessage } from "../../utils";
 
     // State + stateful ----------------------------
-    const { pdbText = "" } = $props();
+    const { structureText = "", format = "mmcif" }: { structureText?: string; format?: "mmcif" | "pdb" } =
+        $props();
     let loading = $state(false);
     let error = $state<string | null>(null);
     let logits = $state<ContactMap[]>([]);
 
     $effect(() => {
-        if (pdbText) fetchLogits();
+        if (structureText) fetchLogits(structureText, format);
     });
 
-    async function fetchLogits() {
-        if (!pdbText) return;
+    async function fetchLogits(text: string, fmt: string) {
+        if (!text) return;
         loading = true;
         error = null;
 
         try {
             logits = await invoke<ContactMap[]>("get_amplify_contact_map", {
-                pdbText: pdbText,
+                structureText: text,
+                format: fmt === "pdb" ? "pdb" : "cif",
             });
             console.log(logits);
         } catch (e) {

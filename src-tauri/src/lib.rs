@@ -7,8 +7,11 @@ use commands::amplify::{get_amplify_contact_map, get_amplify_logits};
 use commands::dna_utils::translate_dna;
 use commands::esm2_logits::get_esm2_logits;
 use commands::fastx::{convert_fastq_to_fasta_tauri, get_seqstats, get_stats};
-use commands::ligandmpnn_logits::get_ligmpnn_logits;
+use commands::ligandmpnn_logits::{
+    MpnnState, get_ligmpnn_logits, mpnn_available_models, mpnn_design_logits,
+};
 use commands::patterns::check_restriction_sites;
+use commands::plm::PlmState;
 use commands::rnapkin::rnapkin_fn;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
@@ -16,6 +19,8 @@ pub fn run() {
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
+        .manage(MpnnState::default())
+        .manage(PlmState::default())
         .invoke_handler(tauri::generate_handler![
             check_restriction_sites,
             convert_fastq_to_fasta_tauri,
@@ -23,6 +28,8 @@ pub fn run() {
             get_amplify_logits,
             get_esm2_logits,
             get_ligmpnn_logits,
+            mpnn_available_models,
+            mpnn_design_logits,
             get_seqstats,
             get_stats,
             rnapkin_fn,

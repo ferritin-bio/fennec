@@ -21,6 +21,7 @@ tauri-build = { version = "2", features = [] }
 [dependencies]
 anyhow = "1.0"
 bio = "4.2.1"
+candle-core = "0.11.0"
 ferritin-core = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "887f6ebc209b49935eea0d585ca08591c485ecaf", package = "ferritin-core" }
 ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "887f6ebc209b49935eea0d585ca08591c485ecaf", package = "ferritin-plms" }
 noodles-fasta = "0.67.0"
@@ -39,3 +40,8 @@ ferritin-plms = { git = "https://github.com/ferritin-bio/ferritin.git", rev = "8
 
 [features]
 metal = ["ferritin-plms/metal"]
+
+# Optimise dependencies (candle / ferritin) in dev builds: unoptimised, the CPU
+# LigandMPNN forward pass takes ~60 s per structure under `tauri dev` vs ~3 s.
+[profile.dev.package."*"]
+opt-level = 3

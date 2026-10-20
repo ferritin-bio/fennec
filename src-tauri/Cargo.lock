@@ -1918,6 +1918,7 @@ version = "0.2.0"
 dependencies = [
  "anyhow",
  "bio",
+ "candle-core",
  "ferritin-core",
  "ferritin-plms",
  "noodles-fasta",
