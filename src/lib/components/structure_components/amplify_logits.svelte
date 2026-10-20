@@ -5,23 +5,25 @@
     import { errorMessage } from "../../utils";
 
     // State + stateful ----------------------------
-    const { pdbText = "" }: { pdbText?: string } = $props();
+    const { structureText = "", format = "mmcif" }: { structureText?: string; format?: "mmcif" | "pdb" } =
+        $props();
     let loading = $state(false);
     let error = $state<string | null>(null);
     let logits = $state<PseudoProbability[]>([]);
 
     $effect(() => {
-        if (pdbText) fetchLogits();
+        if (structureText) fetchLogits(structureText, format);
     });
 
-    async function fetchLogits() {
-        if (!pdbText) return;
+    async function fetchLogits(text: string, fmt: string) {
+        if (!text) return;
         loading = true;
         error = null;
 
         try {
             const result = await invoke<PseudoProbability[]>("get_amplify_logits", {
-                pdbText: pdbText,
+                structureText: text,
+                format: fmt === "pdb" ? "pdb" : "cif",
             });
             logits = result;
         } catch (e) {

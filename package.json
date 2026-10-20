@@ -13,17 +13,23 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "tauri": "tauri",
-    "test": "svelte-kit sync && vitest run"
+    "test": "svelte-kit sync && vitest run",
+    "vendor:molstar": "scripts/vendor-molstar.sh"
   },
   "license": "MIT",
   "dependencies": {
+    "@molstar/core": "file:vendor/molstar/molstar-core-6.0.0-dev.0.tgz",
+    "@molstar/graphics": "file:vendor/molstar/molstar-graphics-6.0.0-dev.0.tgz",
+    "@molstar/io": "file:vendor/molstar/molstar-io-6.0.0-dev.0.tgz",
+    "@molstar/model": "file:vendor/molstar/molstar-model-6.0.0-dev.0.tgz",
+    "@molstar/plugin": "file:vendor/molstar/molstar-plugin-6.0.0-dev.0.tgz",
+    "@molstar/query-language": "file:vendor/molstar/molstar-query-language-6.0.0-dev.0.tgz",
     "@observablehq/plot": "^0.6.17",
     "@tauri-apps/api": "^2.12.2",
     "@tauri-apps/plugin-dialog": "^2.8.1",
     "@tauri-apps/plugin-opener": "^2.7.0",
     "d3": "^7.9.0",
     "ideogram": "^1.53.0",
-    "miew": "^0.12.0",
     "path": "^0.12.7"
   },
   "devDependencies": {

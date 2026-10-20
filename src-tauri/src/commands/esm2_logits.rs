@@ -1,42 +1,55 @@
-//! ESM2 Contact Map / Logits
-use anyhow::Result;
-use ferritin_core::load_structure_from_string;
-use ferritin_plms::featurize::utilities::aa3to1;
+//! ESM2 logits.
 use ferritin_plms::types::PseudoProbability;
-use ferritin_plms::{ESM2Models, ESM2Runner, device};
 
+use super::plm::{PlmState, chain_sequence, run_blocking, structure_format};
+
+/// Per-position ESM2 (t6_8M) pseudo-probabilities for one protein chain.
+///
+/// - `format`: "cif" (default; mmCIF) or "pdb".
+/// - `chain_id`: author chain id; `None` scores the first protein chain.
 #[tauri::command]
-pub fn get_esm2_logits(pdb_seq: &str) -> Result<Vec<PseudoProbability>, String> {
-    let prot_seq = pdb_to_sequence(pdb_seq).map_err(|e| e.to_string())?;
-    let dev = device(false).map_err(|e| e.to_string())?;
-    let runner = ESM2Runner::from_pretrained(ESM2Models::T6_8M, dev).map_err(|e| e.to_string())?;
-    let result = runner
-        .get_pseudo_probabilities(&prot_seq)
-        .map_err(|e| e.to_string())?;
-    Ok(result)
-}
-
-fn pdb_to_sequence(prot_seq: &str) -> Result<String> {
-    let ac = load_structure_from_string(prot_seq, "cif")?;
-    let sequence = ac
-        .iter_residues_aminoacid()
-        .map(|res| res.residue_name().to_string())
-        .map(|res3| aa3to1(&res3))
-        .collect::<String>();
-    Ok(sequence)
+pub async fn get_esm2_logits(
+    state: tauri::State<'_, PlmState>,
+    structure_text: String,
+    format: Option<String>,
+    chain_id: Option<String>,
+) -> Result<Vec<PseudoProbability>, String> {
+    let state = state.inner().clone();
+    run_blocking(move || {
+        let fmt = structure_format(format.as_deref())?;
+        let chain = chain_sequence(&structure_text, fmt, chain_id.as_deref())?;
+        state.with_esm2(|runner| runner.get_pseudo_probabilities(&chain.sequence))
+    })
+    .await
 }
 
 #[cfg(test)]
 mod tests {
+    use super::super::mpnn_structure::StructureFormat;
     use super::*;
 
-    // get_esm2_logits parses mmCIF text, matching what the frontend sends
     const CIF: &str = include_str!("../../testdata/structures/101m.cif");
 
     #[test]
     #[ignore = "loads cached HuggingFace weights; run with `cargo test --lib -- --ignored`"]
     fn test_esm2_logits_from_cif() {
-        let logits = get_esm2_logits(CIF).expect("ESM2 logits");
+        let seq = chain_sequence(CIF, StructureFormat::Cif, None)
+            .unwrap()
+            .sequence;
+        let state = PlmState::default();
+        let t0 = std::time::Instant::now();
+        let logits = state
+            .with_esm2(|r| r.get_pseudo_probabilities(&seq))
+            .expect("ESM2 logits");
+        let cold = t0.elapsed();
+        let t1 = std::time::Instant::now();
+        state
+            .with_esm2(|r| r.get_pseudo_probabilities(&seq))
+            .unwrap();
+        println!(
+            "ESM2 101m: cold {cold:.2?}, warm (cached) {:.2?}",
+            t1.elapsed()
+        );
         assert!(!logits.is_empty());
         assert!(
             logits
